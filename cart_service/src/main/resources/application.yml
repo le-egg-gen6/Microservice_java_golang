@@ -1,0 +1,40 @@
+spring:
+  #Application Config
+  application:
+    name: cart_service
+  threads:
+    virtual:
+      enabled: true
+
+  #Database Config
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cart_service
+    username: postgres
+    password: NgocLe*2004
+    driver-class-name: org.postgresql.Driver
+
+  #JPA Config
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  #Kafka Producer
+  kafka:
+    producer:
+      bootstrap-servers: ${service.kafka_bootstrap_server}
+
+
+#Server Config
+server:
+  port: 8081
+
+#Another Service
+internal:
+  secret: internal_secret
+
+service:
+  kafka_bootstrap_server: http://localhost
+  auth: http://localhost
+  catalog: http://localhost
+

@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    @Value("${auth.url}")
+    @Value("${service.auth}")
     private String authServiceBaseUrl;
 
     @Value("${internal.secret}")
