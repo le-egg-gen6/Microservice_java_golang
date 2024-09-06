@@ -7,17 +7,17 @@ spring:
       enabled: true
 
   #Database Config
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/media_service
-#    username: postgres
-#    password: NgocLe*2004
-#    driver-class-name: org.postgresql.Driver
+  datasource:
+    url: jdbc:postgresql://localhost:5432/media_service
+    username: postgres
+    password: NgocLe*2004
+    driver-class-name: org.postgresql.Driver
 
   #JPA Config
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 #Server Config
 server:
