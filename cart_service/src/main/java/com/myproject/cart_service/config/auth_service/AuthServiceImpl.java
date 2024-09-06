@@ -56,7 +56,9 @@ public class AuthServiceImpl implements AuthService {
                     new ParameterizedTypeReference<ApiResponse<AuthResponse>>() {}
             );
 
-            authResponse = response.getBody().getResult();
+            if (response.getBody() != null) {
+                authResponse = response.getBody().getResult();
+            }
             if (authResponse != null) {
                 token2authRespCache.put(token, authResponse);
             }
