@@ -19,30 +19,45 @@ func (lc *LoginController) Login(c *gin.Context) {
 
 	err := c.ShouldBindJSON(&request)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{})
+		c.JSON(
+			http.StatusBadRequest,
+			payload.NewBadRequestResponse("Invalid Request Body"),
+		)
 		return
 	}
 
 	user, err := lc.LoginUsecase.GetUserByUsername(c.Request.Context(), request.Username)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{})
+		c.JSON(
+			http.StatusBadRequest,
+			payload.NewBadRequestResponse("Invalid Username or Password"),
+		)
 		return
 	}
 
 	if !password_util.CompareHashedPassword(request.Password, user.Password) {
-		c.JSON(http.StatusUnauthorized, gin.H{})
+		c.JSON(
+			http.StatusBadRequest,
+			payload.NewBadRequestResponse("Invalid Username or Password"),
+		)
 		return
 	}
 
 	accessToken, err := lc.LoginUsecase.CreateAccessToken(&user, lc.Env.AccessTokenSecret, lc.Env.AccessTokenExpiryHour)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{})
+		c.JSON(
+			http.StatusInternalServerError,
+			payload.NewServerErrorResponse("An Error Occurred, please try again"),
+		)
 		return
 	}
 
 	refreshToken, err := lc.LoginUsecase.CreateRefreshToken(&user, lc.Env.RefreshTokenSecret, lc.Env.RefreshTokenExpiryHour)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{})
+		c.JSON(
+			http.StatusInternalServerError,
+			payload.NewServerErrorResponse("An Error Occurred, please try again"),
+		)
 		return
 	}
 
@@ -51,6 +66,9 @@ func (lc *LoginController) Login(c *gin.Context) {
 		RefreshToken: refreshToken,
 	}
 
-	c.JSON(http.StatusOK, loginResponse)
+	c.JSON(
+		http.StatusOK,
+		payload.NewDataResponse(loginResponse),
+	)
 	return
 }

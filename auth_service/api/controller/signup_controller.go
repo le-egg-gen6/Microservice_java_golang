@@ -21,19 +21,37 @@ func (sc *SignupController) Signup(c *gin.Context) {
 
 	err := c.ShouldBindJSON(&request)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{})
+		c.JSON(
+			http.StatusBadRequest,
+			payload.NewBadRequestResponse("Invalid Request Body"),
+		)
 		return
 	}
 
-	_, err = sc.SignupUsecase.GetUserByEmail(c.Request.Context(), request.Email)
-	if err != nil {
-		c.JSON(http.StatusConflict, gin.H{})
+	existedUser, err := sc.SignupUsecase.GetUserByEmail(c.Request.Context(), request.Email)
+	if err != nil || existedUser != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			payload.NewBadRequestResponse("Email have been used, please use another email"),
+		)
+		return
+	}
+
+	existedUser, err = sc.SignupUsecase.GetUserByUsername(c.Request.Context(), request.Username)
+	if err != nil || existedUser != nil {
+		c.JSON(
+			http.StatusBadRequest,
+			payload.NewBadRequestResponse("Email have been used, please use another email"),
+		)
 		return
 	}
 
 	encryptedPassword, err := password_util.GenerateEncryptedPassword(request.Password)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{})
+		c.JSON(
+			http.StatusInternalServerError,
+			payload.NewServerErrorResponse("An Error Occurred, please try again"),
+		)
 		return
 	}
 
@@ -46,19 +64,28 @@ func (sc *SignupController) Signup(c *gin.Context) {
 
 	err = sc.SignupUsecase.Create(c.Request.Context(), &user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{})
+		c.JSON(
+			http.StatusInternalServerError,
+			payload.NewServerErrorResponse("An Error Occurred, please try again"),
+		)
 		return
 	}
 
 	accessToken, err := sc.SignupUsecase.CreateAccessToken(&user, sc.Env.AccessTokenSecret, sc.Env.AccessTokenExpiryHour)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{})
+		c.JSON(
+			http.StatusInternalServerError,
+			payload.NewServerErrorResponse("An Error Occurred, please try again"),
+		)
 		return
 	}
 
 	refreshToken, err := sc.SignupUsecase.CreateRefreshToken(&user, sc.Env.RefreshTokenSecret, sc.Env.RefreshTokenExpiryHour)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{})
+		c.JSON(
+			http.StatusInternalServerError,
+			payload.NewServerErrorResponse("An Error Occurred, please try again"),
+		)
 		return
 	}
 
@@ -67,6 +94,9 @@ func (sc *SignupController) Signup(c *gin.Context) {
 		RefreshToken: refreshToken,
 	}
 
-	c.JSON(http.StatusOK, signupResponse)
+	c.JSON(
+		http.StatusOK,
+		payload.NewDataResponse(signupResponse),
+	)
 	return
 }

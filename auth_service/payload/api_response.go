@@ -2,6 +2,7 @@ package payload
 
 const (
 	SUCCESS               = 200
+	BAD_REQUEST           = 400
 	UNAUTHORIZED          = 401
 	INTERNAL_SERVER_ERROR = 500
 )
@@ -28,7 +29,15 @@ func NewServerErrorResponse(msg string) *ApiResponse {
 	}
 }
 
-func NewUnauthorizedResponse(root error, msg string) *ApiResponse {
+func NewBadRequestResponse(msg string) *ApiResponse {
+	return &ApiResponse{
+		Code:    BAD_REQUEST,
+		Message: msg,
+		Result:  nil,
+	}
+}
+
+func NewUnauthorizedResponse(msg string) *ApiResponse {
 	return &ApiResponse{
 		Code:    UNAUTHORIZED,
 		Message: msg,

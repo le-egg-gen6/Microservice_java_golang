@@ -5,6 +5,7 @@ import (
 	"auth_service/payload"
 	"auth_service/usecase"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type ValidateTokenController struct {
@@ -16,7 +17,11 @@ func (vtc *ValidateTokenController) ValidateToken(c *gin.Context) {
 	var request payload.ValidateTokenRequest
 
 	if err := c.ShouldBindJSON(&request); err != nil {
-
+		c.JSON(
+			http.StatusBadRequest,
+			payload.NewBadRequestResponse("Invalid Request Body"),
+		)
+		return
 	}
 	id, err := vtc.ValidateTokenUsecase.ExtractIDFromToken(request.AccessToken, vtc.Env.AccessTokenSecret)
 	if err != nil {
