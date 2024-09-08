@@ -29,4 +29,5 @@ public class ApiResponse<T> {
 
 	@JsonProperty("result")
 	private T result;
+
 }

@@ -26,3 +26,7 @@ server:
 #Another Service
 internal:
   secret: internal_secret
+
+#File System Config
+file:
+  directoty:
