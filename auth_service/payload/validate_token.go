@@ -5,5 +5,5 @@ type ValidateTokenRequest struct {
 }
 
 type ValidateTokenResponse struct {
-	Authorized bool `json:"authorized"`
+	Authenticated bool `json:"authenticated"`
 }

@@ -9,7 +9,7 @@ import (
 )
 
 func Setup(env *bootstrap.Env, timeout time.Duration, db mongo.Database, gin *gin.Engine) {
-	publicRouter := gin.Group("/api/v1")
+	publicRouter := gin.Group("")
 	// All Public APIs
 	NewSignupRouter(env, timeout, db, publicRouter)
 	NewLoginRouter(env, timeout, db, publicRouter)
