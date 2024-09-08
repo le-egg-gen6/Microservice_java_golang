@@ -6,6 +6,14 @@ spring:
     virtual:
       enabled: true
 
+  #Multipart File Upload Config
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 75MB
+      file-size-threshold: 1MB
+
   #Database Config
   datasource:
     url: jdbc:postgresql://localhost:5432/media_service
@@ -27,6 +35,5 @@ server:
 internal:
   secret: internal_secret
 
-#File System Config
-file:
-  directoty:
+service:
+  media: http://localhost

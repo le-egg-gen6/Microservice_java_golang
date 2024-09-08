@@ -10,7 +10,8 @@ import lombok.*;
 @Table(
         name = "t_media",
         indexes = {
-                @Index(name = "t_media_idx_1", columnList = "fileName")
+                @Index(name = "t_media_idx_1", columnList = "fileName"),
+                @Index(name = "t_media_idx_2", columnList = "caption")
         }
 )
 @Data
@@ -24,6 +25,8 @@ public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String caption;
 
     private String fileName;
 
