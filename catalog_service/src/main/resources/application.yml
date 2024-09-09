@@ -1,0 +1,22 @@
+spring:
+  #Application Config
+  application:
+    name: catalog_service
+  threads:
+    virtual:
+      enabled: true
+
+  #Database Config
+
+  #JPA Config
+
+#Server Config
+server:
+  port: 8083
+
+#Another Service
+internal:
+  secret: internal_secret
+
+service:
+  media: http://localhost
