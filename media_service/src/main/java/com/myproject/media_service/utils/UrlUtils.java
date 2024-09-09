@@ -16,7 +16,7 @@ public class UrlUtils {
 
     public static String getUrl(Media media) {
         return UriComponentsBuilder.fromUriString(baseUrl)
-                .path(String.format("/media/%1$s/file/%2$s", media.getId(), media.getFileName()))
+                .path(String.format("/media/view/%1$s/file/%2$s", media.getId(), media.getFileName()))
                 .build().toUriString();
     }
 

@@ -2,6 +2,7 @@ package com.myproject.media_service.service.impl;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.myproject.media_service.dto.MediaDto;
 import com.myproject.media_service.entity.Media;
 import com.myproject.media_service.exception.custom.FileNotFoundException;
 import com.myproject.media_service.exception.custom.MultipartFileContentException;
@@ -14,6 +15,8 @@ import com.myproject.media_service.service.MediaService;
 import com.myproject.media_service.utils.MediaUtils;
 import com.myproject.media_service.utils.StringUtils;
 import com.myproject.media_service.utils.UrlUtils;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -123,6 +126,20 @@ public class MediaServiceImpl implements MediaService {
             .caption(media.getCaption())
             .fileName(media.getFileName())
             .url(url)
+            .build();
+    }
+
+    @Override
+    public MediaDto getFileResource(Long id, String fileName) {
+        Media media = mediaRepository.findById(id).orElse(null);
+        if (media == null || fileName.equalsIgnoreCase(media.getFileName())) {
+            return MediaDto.builder().build();
+        }
+        MediaType mediaType = MediaType.valueOf(media.getMediaType());
+        InputStream inputStream = new ByteArrayInputStream(media.getData());
+        return MediaDto.builder()
+            .mediaType(mediaType)
+            .content(inputStream)
             .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.myproject.media_service.service;
 
+import com.myproject.media_service.dto.MediaDto;
 import com.myproject.media_service.payload.request.MediaUploadRequest;
 import com.myproject.media_service.payload.response.MediaResponse;
 import com.myproject.media_service.payload.response.NoMediaResponse;
@@ -15,4 +16,5 @@ public interface MediaService {
 
     MediaResponse getMediaByName(String fileName);
 
+    MediaDto getFileResource(Long id, String fileName);
 }
