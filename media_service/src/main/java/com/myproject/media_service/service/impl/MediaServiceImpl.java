@@ -11,9 +11,11 @@ import com.myproject.media_service.payload.response.MediaResponse;
 import com.myproject.media_service.payload.response.NoMediaResponse;
 import com.myproject.media_service.repository.MediaRepository;
 import com.myproject.media_service.service.MediaService;
+import com.myproject.media_service.utils.MediaUtils;
 import com.myproject.media_service.utils.StringUtils;
 import com.myproject.media_service.utils.UrlUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MediaServiceImpl implements MediaService {
 
     private final MediaRepository mediaRepository;
@@ -43,10 +46,8 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public NoMediaResponse saveMedia(MediaUploadRequest request) {
-        MediaType mediaType = MediaType.valueOf(Objects.requireNonNull(request.getMultipartFile().getContentType()));
-        if (!(MediaType.IMAGE_PNG.equals(mediaType)
-                || MediaType.IMAGE_JPEG.equals(mediaType)
-                || MediaType.IMAGE_GIF.equals(mediaType))) {
+        if (!(MediaUtils.isFileTypeValid(request.getMultipartFile()))) {
+            log.error("File type not accepted");
             throw new UnsupportedMediaTypeException();
         }
         Media media = new Media();
@@ -56,6 +57,7 @@ public class MediaServiceImpl implements MediaService {
         try {
             media.setData(request.getMultipartFile().getBytes());
         } catch (IOException e) {
+            log.error("Multipartfile content IO error");
             throw new MultipartFileContentException(e);
         }
 
@@ -66,6 +68,7 @@ public class MediaServiceImpl implements MediaService {
         }
 
         media = mediaRepository.saveAndFlush(media);
+        log.info("File " + MediaUtils.getMediaLogStr(media) + " saved");
         fileName2Media.put(media.getFileName(), media);
         id2Media.put(media.getId(), media);
         return NoMediaResponse.builder()
@@ -81,7 +84,10 @@ public class MediaServiceImpl implements MediaService {
         Media media = id2Media.getIfPresent(id);
         if (media == null) {
             media = mediaRepository.findById(id).orElseThrow(
-                    () -> new FileNotFoundException()
+                    () -> {
+                        log.error("File " + id + " not existed");
+                        throw new FileNotFoundException();
+                    }
             );
         }
         id2Media.put(id, media);
