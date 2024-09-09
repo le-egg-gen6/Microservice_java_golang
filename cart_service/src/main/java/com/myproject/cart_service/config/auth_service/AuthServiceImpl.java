@@ -3,6 +3,8 @@ package com.myproject.cart_service.config.auth_service;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.myproject.cart_service.payload.ApiResponse;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -36,6 +38,11 @@ public class AuthServiceImpl implements AuthService {
             .build();
 
     @Override
+    @CircuitBreaker(
+        name = "authService",
+        fallbackMethod = "fallbackValidate"
+    )
+    @Retry(name = "authService")
     public AuthResponse validate(String token) {
         AuthResponse authResponse = token2authRespCache.getIfPresent(token);
         if (authResponse == null) {
@@ -69,6 +76,12 @@ public class AuthServiceImpl implements AuthService {
                     .build();
         }
         return authResponse;
+    }
+
+    public AuthResponse fallbackValidate(String token, Throwable throwable) {
+        return AuthResponse.builder()
+            .authenticated(false)
+            .build();
     }
 
 }
