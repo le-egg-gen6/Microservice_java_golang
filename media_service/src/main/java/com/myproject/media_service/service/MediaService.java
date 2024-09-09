@@ -13,4 +13,6 @@ public interface MediaService {
 
     MediaResponse getMediaById(Long id);
 
+    MediaResponse getMediaByName(String fileName);
+
 }

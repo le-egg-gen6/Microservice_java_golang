@@ -89,9 +89,9 @@ public class MediaServiceImpl implements MediaService {
                         throw new FileNotFoundException();
                     }
             );
+            id2Media.put(media.getId(), media);
+            fileName2Media.put(media.getFileName(), media);
         }
-        id2Media.put(id, media);
-        fileName2Media.put(media.getFileName(), media);
         String url = UrlUtils.getUrl(media);
         return MediaResponse.builder()
                 .id(media.getId())
@@ -101,5 +101,28 @@ public class MediaServiceImpl implements MediaService {
                 .url(url)
                 .build();
 
+    }
+
+    @Override
+    public MediaResponse getMediaByName(String fileName) {
+        Media media = fileName2Media.getIfPresent(fileName);
+        if (media == null) {
+            media = mediaRepository.findByFileName(fileName).orElseThrow(
+                () -> {
+                    log.error("File " + fileName + " not existed");
+                    throw new FileNotFoundException();
+                }
+            );
+            id2Media.put(media.getId(), media);
+            fileName2Media.put(media.getFileName(), media);
+        }
+        String url = UrlUtils.getUrl(media);
+        return MediaResponse.builder()
+            .id(media.getId())
+            .mediaType(media.getMediaType())
+            .caption(media.getCaption())
+            .fileName(media.getFileName())
+            .url(url)
+            .build();
     }
 }
