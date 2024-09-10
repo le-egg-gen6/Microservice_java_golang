@@ -1,0 +1,20 @@
+spring:
+  #Application Config
+  application:
+    name: product_service
+
+  #Database Config
+
+  #JPA Config
+
+
+#Server Config
+server:
+  port: 8084
+
+#Another Service
+internal:
+  secret: internal_secret
+
+service:
+
