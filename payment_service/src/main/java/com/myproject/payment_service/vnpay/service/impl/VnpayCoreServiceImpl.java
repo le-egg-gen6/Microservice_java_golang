@@ -1,6 +1,7 @@
 package com.myproject.payment_service.vnpay.service.impl;
 
 import com.myproject.payment_service.vnpay.config.VnpayConfig;
+import com.myproject.payment_service.vnpay.dto.VNPAYCreatePayment;
 import com.myproject.payment_service.vnpay.service.VnpayCoreService;
 import com.myproject.payment_service.vnpay.utils.VnpayUtils;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,13 @@ public class VnpayCoreServiceImpl implements VnpayCoreService {
     private final VnpayUtils vnpayUtils;
 
 
+    @Override
+    public VNPAYCreatePayment createPayment() {
+        return null;
+    }
 
+    @Override
+    public VNPAYCreatePayment executePayment() {
+        return null;
+    }
 }
