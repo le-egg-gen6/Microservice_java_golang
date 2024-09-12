@@ -23,8 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author nguyenle
@@ -34,7 +33,21 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class MediaServiceImpl implements MediaService {
 
+    private static final int CORE_POOL_SIZE = 1;
+
+    private static final int MAX_POOL_SIZE = 5;
+
+    private static final int TIME_LIVE_IN_QUEUE = 5;
+
     private final MediaRepository mediaRepository;
+
+    private ExecutorService executorService = new ThreadPoolExecutor(
+            CORE_POOL_SIZE,
+            MAX_POOL_SIZE,
+            TIME_LIVE_IN_QUEUE,
+            TimeUnit.MINUTES,
+            new LinkedBlockingQueue<>()
+    );
 
     private Cache<String, Media> fileName2Media = Caffeine.newBuilder()
             .expireAfterAccess(30, TimeUnit.MINUTES)
@@ -46,6 +59,10 @@ public class MediaServiceImpl implements MediaService {
             .maximumSize(1_000)
             .build();
 
+
+    private void submitAsynchronousTask(Runnable task) {
+        executorService.submit(task);
+    }
 
     @Override
     public NoMediaResponse saveMedia(MediaUploadRequest request) {
@@ -70,7 +87,7 @@ public class MediaServiceImpl implements MediaService {
             media.setFileName(request.getFileName());
         }
 
-        media = mediaRepository.saveAndFlush(media);
+        submitAsynchronousTask(() -> mediaRepository.saveAndFlush(media));
         log.info("File " + MediaUtils.getMediaLogStr(media) + " saved");
         fileName2Media.put(media.getFileName(), media);
         id2Media.put(media.getId(), media);
