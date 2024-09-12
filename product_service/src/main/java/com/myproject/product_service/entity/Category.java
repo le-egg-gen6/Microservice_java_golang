@@ -3,17 +3,17 @@ package com.myproject.product_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
 import java.util.Set;
 
 /**
  * @author nguyenle
+ * @since 2:22 AM Fri 9/13/2024
  */
 @Entity
 @Table(
-        name = "t_promotion",
+        name = "t_category",
         indexes = {
-
+                @Index(columnList = "name")
         }
 )
 @Data
@@ -22,28 +22,19 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Promotion {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(length = 1000)
+    @Column
     private String description;
 
-    @Column(name = "discount_percentage")
-    private Double discountPercentage;
-
-    @Column(name = "start_date")
-    private Date startDate;
-
-    @Column(name = "end_date")
-    private Date endDate;
-
-    @ManyToMany(mappedBy = "promotions", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
     private Set<Product> products;
 
 }
