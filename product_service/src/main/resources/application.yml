@@ -17,4 +17,6 @@ internal:
   secret: internal_secret
 
 service:
+  auth: //
+  media: //
 
