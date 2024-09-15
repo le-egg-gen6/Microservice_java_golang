@@ -81,8 +81,8 @@ public class AuthServiceImpl implements AuthService {
         return authResponse;
     }
 
-    public AuthResponse fallbackValidate(String token, Throwable throwable) {
-        log.info("Auth Service take so much time to response");
+    private AuthResponse fallbackValidate(String token, Throwable throwable) {
+        log.info("Auth Service take so much time to response, please check!");
         return AuthResponse.builder()
             .authenticated(false)
             .build();
