@@ -22,33 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
  * @author nguyenle
  */
 @RestController
-@RequestMapping("/media")
+@RequestMapping("/public/media")
 @RequiredArgsConstructor
-public class MediaController {
+public class PublicMediaController {
 
     private final MediaService mediaService;
-
-    @GetMapping("/info/{id}")
-    public ResponseEntity<ApiResponse<?>> get(@PathVariable(name = "id") Long id) {
-        MediaResponse mediaResponse = mediaService.getMediaById(id);
-        return ResponseEntity.ok().body(
-            ApiResponse.builder()
-                .code(HttpStatus.OK.value())
-                .result(mediaResponse)
-                .build()
-        );
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<ApiResponse<?>> create(@RequestBody MediaUploadRequest request) {
-        NoMediaResponse response = mediaService.saveMedia(request);
-        return ResponseEntity.ok().body(
-            ApiResponse.builder()
-                .code(HttpStatus.OK.value())
-                .result(response)
-                .build()
-        );
-    }
 
     @GetMapping("/view/{id}/file/{fileName}")
     public ResponseEntity<InputStreamResource> getFile(
