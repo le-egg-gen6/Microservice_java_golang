@@ -3,7 +3,6 @@ package com.myproject.media_service.controller;
 import com.myproject.media_service.payload.ApiResponse;
 import com.myproject.media_service.payload.request.MediaUploadRequest;
 import com.myproject.media_service.payload.response.MediaResponse;
-import com.myproject.media_service.payload.response.NoMediaResponse;
 import com.myproject.media_service.service.MediaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,7 +38,7 @@ public class PrivateMediaController {
 
 	@PostMapping("/create")
 	public ResponseEntity<ApiResponse<?>> create(@RequestBody MediaUploadRequest request) {
-		NoMediaResponse response = mediaService.saveMedia(request);
+		MediaResponse response = mediaService.saveMedia(request);
 		return ResponseEntity.ok().body(
 			ApiResponse.builder()
 				.code(HttpStatus.OK.value())

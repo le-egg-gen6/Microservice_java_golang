@@ -1,20 +1,14 @@
 package com.myproject.media_service.controller;
 
 import com.myproject.media_service.dto.MediaDto;
-import com.myproject.media_service.payload.ApiResponse;
-import com.myproject.media_service.payload.request.MediaUploadRequest;
-import com.myproject.media_service.payload.response.MediaResponse;
-import com.myproject.media_service.payload.response.NoMediaResponse;
 import com.myproject.media_service.service.MediaService;
+import com.myproject.media_service.utils.UrlUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,11 +22,12 @@ public class PublicMediaController {
 
     private final MediaService mediaService;
 
-    @GetMapping("/view/{id}/file/{fileName}")
+    @GetMapping("/view/{hashId}")
     public ResponseEntity<InputStreamResource> getFile(
-        @PathVariable(name = "id") Long id,
-        @PathVariable(name = "fileName") String fileName
+        @PathVariable(name = "hashId") String hashId
     ) {
+        Long id = UrlUtils.getId(hashId);
+        String fileName = UrlUtils.getFileName(hashId);
         MediaDto mediaDto = mediaService.getFileResource(id, fileName);
 
         return ResponseEntity.ok()

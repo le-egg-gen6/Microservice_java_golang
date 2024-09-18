@@ -9,7 +9,6 @@ import com.myproject.media_service.exception.custom.MultipartFileContentExceptio
 import com.myproject.media_service.exception.custom.UnsupportedMediaTypeException;
 import com.myproject.media_service.payload.request.MediaUploadRequest;
 import com.myproject.media_service.payload.response.MediaResponse;
-import com.myproject.media_service.payload.response.NoMediaResponse;
 import com.myproject.media_service.repository.MediaRepository;
 import com.myproject.media_service.service.MediaService;
 import com.myproject.media_service.utils.MediaUtils;
@@ -65,7 +64,7 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public NoMediaResponse saveMedia(MediaUploadRequest request) {
+    public MediaResponse saveMedia(MediaUploadRequest request) {
         if (!(MediaUtils.isFileTypeValid(request.getMultipartFile()))) {
             log.error("File type not accepted");
             throw new UnsupportedMediaTypeException();
@@ -90,10 +89,12 @@ public class MediaServiceImpl implements MediaService {
         log.info("File " + MediaUtils.getMediaLogStr(media) + " saved");
         fileName2Media.put(media.getFileName(), media);
         id2Media.put(media.getId(), media);
-        return NoMediaResponse.builder()
+        String url = UrlUtils.getUrl(media);
+        return MediaResponse.builder()
                 .id(media.getId())
                 .mediaType(media.getMediaType())
                 .fileName(media.getFileName())
+                .url(url)
                 .build();
     }
 
@@ -144,9 +145,12 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public MediaDto getFileResource(Long id, String fileName) {
-        Media media = mediaRepository.findById(id).orElse(null);
-        if (media == null || fileName.equalsIgnoreCase(media.getFileName())) {
-            return MediaDto.builder().build();
+        Media media = id2Media.getIfPresent(id);
+        if (media == null) {
+            media = mediaRepository.findById(id).orElse(null);
+            if (media == null || fileName.equalsIgnoreCase(media.getFileName())) {
+                return MediaDto.builder().build();
+            }
         }
         MediaType mediaType = MediaType.valueOf(media.getMediaType());
         InputStream inputStream = new ByteArrayInputStream(media.getData());
