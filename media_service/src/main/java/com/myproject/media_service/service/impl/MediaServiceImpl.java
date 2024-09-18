@@ -71,7 +71,6 @@ public class MediaServiceImpl implements MediaService {
             throw new UnsupportedMediaTypeException();
         }
         Media media = new Media();
-        media.setCaption(request.getCaption());
         media.setMediaType(request.getMultipartFile().getContentType());
 
         try {
@@ -94,7 +93,6 @@ public class MediaServiceImpl implements MediaService {
         return NoMediaResponse.builder()
                 .id(media.getId())
                 .mediaType(media.getMediaType())
-                .caption(media.getCaption())
                 .fileName(media.getFileName())
                 .build();
     }
@@ -116,7 +114,6 @@ public class MediaServiceImpl implements MediaService {
         return MediaResponse.builder()
                 .id(media.getId())
                 .mediaType(media.getMediaType())
-                .caption(media.getCaption())
                 .fileName(media.getFileName())
                 .url(url)
                 .build();
@@ -140,7 +137,6 @@ public class MediaServiceImpl implements MediaService {
         return MediaResponse.builder()
             .id(media.getId())
             .mediaType(media.getMediaType())
-            .caption(media.getCaption())
             .fileName(media.getFileName())
             .url(url)
             .build();

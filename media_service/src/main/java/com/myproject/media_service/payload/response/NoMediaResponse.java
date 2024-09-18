@@ -17,9 +17,6 @@ public class NoMediaResponse {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("caption")
-    private String caption;
-
     @JsonProperty("fileName")
     private String fileName;
 

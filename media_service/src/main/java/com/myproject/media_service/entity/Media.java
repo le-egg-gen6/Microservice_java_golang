@@ -26,8 +26,6 @@ public class Media {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String caption;
-
     private String fileName;
 
     @Lob

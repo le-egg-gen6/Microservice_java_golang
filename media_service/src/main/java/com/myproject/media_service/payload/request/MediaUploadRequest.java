@@ -16,9 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class MediaUploadRequest {
 
-    @JsonProperty("caption")
-    private String caption;
-
     @NotNull
     @JsonProperty("multipartFile")
     private MultipartFile multipartFile;
