@@ -6,7 +6,7 @@ package com.myproject.product_service.config.media_service;
  */
 public interface MediaService {
 
-    NoMediaResponse saveMedia(MediaUploadRequest request);
+    MediaResponse saveMedia(MediaUploadRequest request);
 
     MediaResponse getMediaInformation(Long mediaId);
 

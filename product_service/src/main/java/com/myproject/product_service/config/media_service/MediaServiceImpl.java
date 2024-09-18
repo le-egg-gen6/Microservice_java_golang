@@ -35,7 +35,7 @@ public class MediaServiceImpl implements MediaService {
 
     private final RestTemplate restTemplate;
 
-    private Cache<Long, String> id2MediaUrlCache = Caffeine.newBuilder()
+    private Cache<Long, MediaResponse> id2MediaResponse = Caffeine.newBuilder()
             .expireAfterAccess(10, TimeUnit.MINUTES)
             .maximumSize(1_000)
             .build();
@@ -46,7 +46,7 @@ public class MediaServiceImpl implements MediaService {
             fallbackMethod = "fallbackSaveMedia"
     )
     @Retry(name = "mediaService")
-    public NoMediaResponse saveMedia(MediaUploadRequest request) {
+    public MediaResponse saveMedia(MediaUploadRequest request) {
         log.info("Saving media from product service");
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Internal", internalSecret);
@@ -56,26 +56,29 @@ public class MediaServiceImpl implements MediaService {
                 httpHeaders
         );
 
-        ResponseEntity<ApiResponse<NoMediaResponse>> response = restTemplate.exchange(
+        ResponseEntity<ApiResponse<MediaResponse>> response = restTemplate.exchange(
             mediaServiceBaseUrl + "/internal/media/create",
             HttpMethod.POST,
             request2Client,
-            new ParameterizedTypeReference<ApiResponse<NoMediaResponse>>() {}
+            new ParameterizedTypeReference<ApiResponse<MediaResponse>>() {}
         );
-        NoMediaResponse noMediaResponse = NoMediaResponse.builder()
+        MediaResponse mediaResponse = MediaResponse.builder()
             .id(-1L)
             .fileName("")
             .mediaType("")
             .build();
         if (response.getBody() != null) {
-            noMediaResponse = response.getBody().getResult();
+            mediaResponse = response.getBody().getResult();
         }
-        return noMediaResponse;
+        if (mediaResponse != null && mediaResponse.getId() != -1L) {
+            id2MediaResponse.put(mediaResponse.getId(), mediaResponse);
+        }
+        return mediaResponse;
     }
 
-    private NoMediaResponse fallbackSaveMedia(MediaUploadRequest request, Throwable throwable) {
+    private MediaResponse fallbackSaveMedia(MediaUploadRequest request, Throwable throwable) {
         log.error("Media service take so much time to response, please check!");
-        return NoMediaResponse.builder()
+        return MediaResponse.builder()
                 .id(-1L)
                 .mediaType("")
                 .fileName("")
@@ -89,7 +92,33 @@ public class MediaServiceImpl implements MediaService {
     )
     @Retry(name = "mediaService")
     public MediaResponse getMediaInformation(Long mediaId) {
+        if (id2MediaResponse.getIfPresent(mediaId) != null) {
+            return id2MediaResponse.getIfPresent(mediaId);
+        }
+        log.info("Get media info from media service");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Internal", internalSecret);
 
+
+        HttpEntity<MediaUploadRequest> request2Client = new HttpEntity<>(
+                httpHeaders
+        );
+
+        ResponseEntity<ApiResponse<MediaResponse>> response = restTemplate.exchange(
+                mediaServiceBaseUrl + "/internal/media/info/" + mediaId,
+                HttpMethod.GET,
+                request2Client,
+                new ParameterizedTypeReference<ApiResponse<MediaResponse>>() {}
+        );
+        MediaResponse mediaResponse = MediaResponse.builder()
+                .id(-1L)
+                .fileName("")
+                .mediaType("")
+                .build();
+        if (response.getBody() != null) {
+            mediaResponse = response.getBody().getResult();
+        }
+        return mediaResponse;
     }
 
     private MediaResponse fallbackGetMediaInformation(Long mediaId, Throwable throwable) {
