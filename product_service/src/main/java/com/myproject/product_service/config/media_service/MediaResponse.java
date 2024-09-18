@@ -18,9 +18,6 @@ public class MediaResponse {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("caption")
-    private String caption;
-
     @JsonProperty("fileName")
     private String fileName;
 

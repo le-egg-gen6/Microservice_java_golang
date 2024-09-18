@@ -2,13 +2,17 @@ package com.myproject.product_service.config.media_service;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.myproject.product_service.payload.ApiResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -47,10 +51,26 @@ public class MediaServiceImpl implements MediaService {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Internal", internalSecret);
 
-        HttpEntity<MediaUploadRequest> request = new HttpEntity<>(
-
+        HttpEntity<MediaUploadRequest> request2Client = new HttpEntity<>(
+                request,
                 httpHeaders
         );
+
+        ResponseEntity<ApiResponse<NoMediaResponse>> response = restTemplate.exchange(
+            mediaServiceBaseUrl + "/internal/media/create",
+            HttpMethod.POST,
+            request2Client,
+            new ParameterizedTypeReference<ApiResponse<NoMediaResponse>>() {}
+        );
+        NoMediaResponse noMediaResponse = NoMediaResponse.builder()
+            .id(-1L)
+            .fileName("")
+            .mediaType("")
+            .build();
+        if (response.getBody() != null) {
+            noMediaResponse = response.getBody().getResult();
+        }
+        return noMediaResponse;
     }
 
     private NoMediaResponse fallbackSaveMedia(MediaUploadRequest request, Throwable throwable) {
@@ -58,7 +78,6 @@ public class MediaServiceImpl implements MediaService {
         return NoMediaResponse.builder()
                 .id(-1L)
                 .mediaType("")
-                .caption("")
                 .fileName("")
                 .build();
     }
@@ -70,14 +89,13 @@ public class MediaServiceImpl implements MediaService {
     )
     @Retry(name = "mediaService")
     public MediaResponse getMediaInformation(Long mediaId) {
-        return null;
+
     }
 
     private MediaResponse fallbackGetMediaInformation(Long mediaId, Throwable throwable) {
         return MediaResponse.builder()
                 .id(-1L)
                 .mediaType("")
-                .caption("")
                 .fileName("")
                 .url("")
                 .build();
