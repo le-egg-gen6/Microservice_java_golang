@@ -12,6 +12,8 @@ vnpay:
   secret_key: //
   api_url: https://sandbox.vnpayment.vn/merchant_webapi/api/transaction
   version: 2.1.0
+  locale: en
+  curr_code: USD
 
 
 #Paypal Config

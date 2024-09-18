@@ -30,4 +30,10 @@ public class VnpayConfig {
     @Value("${vnpay.version}")
     private String version;
 
+    @Value("${vnpay.locale}")
+    private String displayLanguage;
+
+    @Value("${vnpay.curr_code}")
+    private String currency;
+
 }
