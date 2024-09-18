@@ -30,12 +30,21 @@ public class InternalServiceFilter extends OncePerRequestFilter {
 		@NonNull HttpServletResponse response,
 		@NonNull FilterChain filterChain
 	) throws ServletException, IOException {
-		String internalHeader = extractInternalHeader(request);
-		if (internalHeader.equals(securityConstant.getInternalSecret())) {
+		String path = request.getRequestURI();
+		if (isInternalEndpoint(path)) {
+			String internalHeader = extractInternalHeader(request);
+			if (internalHeader.equals(securityConstant.getInternalSecret())) {
+				filterChain.doFilter(request, response);
+				return;
+			}
+			handleUnauthorizedAccess(response);
+		} else {
 			filterChain.doFilter(request, response);
-			return;
 		}
-		handleUnauthorizedAccess(response);
+	}
+
+	public boolean isInternalEndpoint(String path) {
+		return path.startsWith("/internal");
 	}
 
 	private String extractInternalHeader(HttpServletRequest request) {

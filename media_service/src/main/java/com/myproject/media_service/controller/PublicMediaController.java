@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author nguyenle
  */
 @RestController
-@RequestMapping("/public/media")
+@RequestMapping("/media")
 @RequiredArgsConstructor
 public class PublicMediaController {
 
