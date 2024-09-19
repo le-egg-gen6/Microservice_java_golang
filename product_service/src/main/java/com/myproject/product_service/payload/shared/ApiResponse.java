@@ -1,4 +1,4 @@
-package com.myproject.product_service.payload;
+package com.myproject.product_service.payload.shared;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

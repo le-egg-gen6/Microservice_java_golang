@@ -3,7 +3,7 @@ package com.myproject.product_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -13,7 +13,9 @@ import java.util.Set;
 @Table(
         name = "t_promotion",
         indexes = {
-
+                @Index(columnList = "name"),
+                @Index(columnList = "start_date"),
+                @Index(columnList = "end_date")
         }
 )
 @Data
@@ -34,10 +36,10 @@ public class Promotion extends AbstractBaseEntity {
     private Double discountPercentage;
 
     @Column(name = "start_date")
-    private Date startDate;
+    private LocalDateTime startDate;
 
     @Column(name = "end_date")
-    private Date endDate;
+    private LocalDateTime endDate;
 
     @ManyToMany(mappedBy = "promotions", fetch = FetchType.LAZY)
     private Set<Product> products;

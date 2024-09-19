@@ -2,7 +2,7 @@ package com.myproject.product_service.config.auth_service;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.myproject.product_service.payload.ApiResponse;
+import com.myproject.product_service.payload.shared.ApiResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;

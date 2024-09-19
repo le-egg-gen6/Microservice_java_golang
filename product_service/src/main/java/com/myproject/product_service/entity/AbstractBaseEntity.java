@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
  * @author nguyenle
  * @since 10:20 PM Thu 9/19/2024
  */
-@Data
 @Getter
 @Setter
 @MappedSuperclass
