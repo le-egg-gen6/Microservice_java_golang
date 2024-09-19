@@ -13,5 +13,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SocketMessage {
+public abstract class SocketMessage {
+
+    public abstract String getEvent();
+
 }

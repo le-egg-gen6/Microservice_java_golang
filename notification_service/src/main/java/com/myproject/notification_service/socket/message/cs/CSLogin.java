@@ -5,11 +5,13 @@ import com.myproject.notification_service.socket.message.SocketMessage;
 
 /**
  * @author nguyenle
- * @since 1:50 AM Fri 9/20/2024
+ * @since 2:13 AM Thu 9/19/2024
  */
-public class CSSendChatMessage extends SocketMessage {
+public class CSLogin extends SocketMessage {
+
+
     @Override
     public String getEvent() {
-        return EventConstant.CHAT_MESSAGE.getName();
+        return EventConstant.LOGIN.getName();
     }
 }

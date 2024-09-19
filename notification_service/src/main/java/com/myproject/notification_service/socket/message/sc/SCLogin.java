@@ -1,15 +1,16 @@
-package com.myproject.notification_service.socket.message.cs;
+package com.myproject.notification_service.socket.message.sc;
 
 import com.myproject.notification_service.socket.event.EventConstant;
 import com.myproject.notification_service.socket.message.SocketMessage;
 
 /**
  * @author nguyenle
- * @since 1:50 AM Fri 9/20/2024
+ * @since 1:49 AM Fri 9/20/2024
  */
-public class CSSendChatMessage extends SocketMessage {
+public class SCLogin extends SocketMessage {
+
     @Override
     public String getEvent() {
-        return EventConstant.CHAT_MESSAGE.getName();
+        return EventConstant.LOGIN.getName();
     }
 }
