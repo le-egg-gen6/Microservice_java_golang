@@ -22,16 +22,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Category {
+public class Category extends AbstractBaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
+    @Column(name = "name",nullable = false, unique = true)
     private String name;
 
-    @Column
+    @Column(name = "description")
     private String description;
 
     @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)

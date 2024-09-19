@@ -22,16 +22,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Promotion {
+public class Promotion extends AbstractBaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(length = 1000)
+    @Column(name = "description", length = 1000)
     private String description;
 
     @Column(name = "discount_percentage")

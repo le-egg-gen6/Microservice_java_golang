@@ -2,6 +2,7 @@ package com.myproject.product_service.service.impl;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.myproject.product_service.config.media_service.MediaService;
 import com.myproject.product_service.entity.Product;
 import com.myproject.product_service.repository.ProductRepository;
 import com.myproject.product_service.service.ProductService;
@@ -21,8 +22,12 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
+    private final MediaService mediaService;
+
     private Cache<Long, Product> code2Product = Caffeine.newBuilder()
             .expireAfterAccess(10, TimeUnit.MINUTES)
             .maximumSize(1_000)
             .build();
+
+
 }
