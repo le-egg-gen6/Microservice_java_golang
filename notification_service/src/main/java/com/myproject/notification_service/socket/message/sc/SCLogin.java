@@ -11,6 +11,6 @@ public class SCLogin extends SocketMessage {
 
     @Override
     public String getEvent() {
-        return EventConstant.LOGIN.getName();
+        return EventConstant.LOGIN;
     }
 }

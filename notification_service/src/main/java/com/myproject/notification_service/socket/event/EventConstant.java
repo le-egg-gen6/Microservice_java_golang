@@ -7,18 +7,12 @@ import lombok.Getter;
  * @since 2:14 AM Thu 9/19/2024
  */
 @Getter
-public enum EventConstant {
+public class EventConstant {
 
-    LOGIN("login"),
+    public static final String LOGIN = "login";
 
-    CHAT_MESSAGE("chat_message"),
+    public static final String CHAT_MESSAGE = "chat_message";
 
-    NOTIFICATION("notification")
-    ;
+    public static final String NOTIFICATION = "notification";
 
-    private final String name;
-
-    EventConstant(String name) {
-        this.name = name;
-    }
 }

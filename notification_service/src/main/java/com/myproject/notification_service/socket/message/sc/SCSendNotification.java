@@ -10,6 +10,6 @@ import com.myproject.notification_service.socket.message.SocketMessage;
 public class SCSendNotification extends SocketMessage {
     @Override
     public String getEvent() {
-        return EventConstant.NOTIFICATION.getName();
+        return EventConstant.NOTIFICATION;
     }
 }

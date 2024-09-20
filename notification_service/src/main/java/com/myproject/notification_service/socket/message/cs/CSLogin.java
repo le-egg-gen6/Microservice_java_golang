@@ -12,6 +12,6 @@ public class CSLogin extends SocketMessage {
 
     @Override
     public String getEvent() {
-        return EventConstant.LOGIN.getName();
+        return EventConstant.LOGIN;
     }
 }

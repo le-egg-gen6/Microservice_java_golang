@@ -7,9 +7,9 @@ import com.myproject.notification_service.socket.message.SocketMessage;
  * @author nguyenle
  * @since 1:50 AM Fri 9/20/2024
  */
-public class CSSendChatMessage extends SocketMessage {
+public class CSChatMessage extends SocketMessage {
     @Override
     public String getEvent() {
-        return EventConstant.CHAT_MESSAGE.getName();
+        return EventConstant.CHAT_MESSAGE;
     }
 }

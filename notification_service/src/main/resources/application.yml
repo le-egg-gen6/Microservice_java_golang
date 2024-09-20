@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: notification_service
+
+
+socket-server:
+  port: 9999
+  host: localhost
