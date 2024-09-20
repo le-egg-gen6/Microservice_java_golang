@@ -1,5 +1,6 @@
 package com.myproject.product_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 /**
@@ -13,4 +14,14 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CategoryDTO {
+
+    @JsonProperty("id")
+    private Long id;
+
+    @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("description")
+    private String description;
+
 }

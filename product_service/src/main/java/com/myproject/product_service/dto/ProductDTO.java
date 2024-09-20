@@ -1,6 +1,9 @@
 package com.myproject.product_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
+import java.util.List;
 
 /**
  * @author nguyenle
@@ -13,4 +16,29 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ProductDTO {
+
+    @JsonProperty("id")
+    private Long id;
+
+    @JsonProperty("name")
+    private String description;
+
+    @JsonProperty("price")
+    private Long price;
+
+    @JsonProperty("stockQuantity")
+    private Integer stockQuantity;
+
+    @JsonProperty("imageUrl")
+    private String imageUrl;
+
+    @JsonProperty("likesCount")
+    private Integer likesCount;
+
+    @JsonProperty("categories")
+    private List<CategoryDTO> categories;
+
+    @JsonProperty("promotions")
+    private List<PromotionDTO> promotions;
+
 }

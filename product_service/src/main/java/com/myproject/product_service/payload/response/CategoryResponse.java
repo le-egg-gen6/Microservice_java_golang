@@ -15,6 +15,9 @@ import lombok.*;
 @Builder
 public class CategoryResponse {
 
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("name")
     private String name;
 
