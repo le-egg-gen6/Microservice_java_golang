@@ -1,4 +1,4 @@
-package com.myproject.notification_service.socket.manager;
+package com.myproject.notification_service.socket.config;
 
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
@@ -19,7 +19,7 @@ import java.lang.reflect.Type;
  * @since 3:26 AM Sat 9/21/2024
  */
 @Configuration
-@Order(value = Ordered.HIGHEST_PRECEDENCE)
+@Order(value = Ordered.LOWEST_PRECEDENCE)
 @RequiredArgsConstructor
 @Slf4j
 public class SocketEventRegister {

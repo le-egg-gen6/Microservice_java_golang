@@ -4,6 +4,8 @@ import com.corundumstudio.socketio.SocketIOServer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 /**
  * @author nguyenle
@@ -19,6 +21,7 @@ public class SocketServerConfig {
     private Integer socketServerPort;
 
     @Bean
+    @Order(value = Ordered.HIGHEST_PRECEDENCE)
     public SocketIOServer socketIOServer() {
         com.corundumstudio.socketio.Configuration configuration = new com.corundumstudio.socketio.Configuration();
         configuration.setHostname(socketServerHost);
