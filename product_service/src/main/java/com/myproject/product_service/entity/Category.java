@@ -3,7 +3,7 @@ package com.myproject.product_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author nguyenle
@@ -22,7 +22,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Category extends AbstractBaseEntity{
+public class Category extends AbstractBaseEntity {
 
     @Column(name = "name",nullable = false, unique = true)
     private String name;
@@ -31,6 +31,6 @@ public class Category extends AbstractBaseEntity{
     private String description;
 
     @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
-    private Set<Product> products;
+    private List<Product> products;
 
 }

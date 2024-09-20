@@ -3,7 +3,7 @@ package com.myproject.product_service.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author nguyenle
@@ -47,7 +47,7 @@ public class Product extends AbstractBaseEntity {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private Set<Category> categories;
+    private List<Category> categories;
 
     @ManyToMany
     @JoinTable(
@@ -55,7 +55,7 @@ public class Product extends AbstractBaseEntity {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "promotion_id")
     )
-    private Set<Promotion> promotions;
+    private List<Promotion> promotions;
 
 
 }

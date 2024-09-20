@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author nguyenle
@@ -42,6 +42,6 @@ public class Promotion extends AbstractBaseEntity {
     private LocalDateTime endDate;
 
     @ManyToMany(mappedBy = "promotions", fetch = FetchType.LAZY)
-    private Set<Product> products;
+    private List<Product> products;
 
 }

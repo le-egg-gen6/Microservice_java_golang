@@ -21,6 +21,9 @@ public class ProductDTO {
     private Long id;
 
     @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("description")
     private String description;
 
     @JsonProperty("price")
