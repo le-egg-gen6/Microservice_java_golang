@@ -15,8 +15,15 @@
     <description>notification_service</description>
     <properties>
         <java.version>21</java.version>
+        <socket-server.version>2.0.11</socket-server.version>
+        <reflections.version>0.10.2</reflections.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${reflections.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -39,7 +46,7 @@
         <dependency>
             <groupId>com.corundumstudio.socketio</groupId>
             <artifactId>netty-socketio</artifactId>
-            <version>2.0.11</version>
+            <version>${socket-server.version}</version>
         </dependency>
     </dependencies>
 
