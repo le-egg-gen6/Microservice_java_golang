@@ -1,21 +1,24 @@
 package com.myproject.notification_service.socket.config;
 
+import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.myproject.notification_service.socket.annotation.SocketEvent;
+import com.myproject.notification_service.socket.manager.AccountManager;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -30,10 +33,14 @@ public class SocketEventRegister {
 
     private final SocketIOServer socketIOServer;
 
-    private final ApplicationContext applicationContext;
+    private final AccountManager accountManager;
 
     @PostConstruct
     public void registerEvents() {
+        initializeConnectListener();
+
+        initializeDisconnectListener();
+
         Reflections reflections = new Reflections("com.myproject", new SubTypesScanner(), new TypeAnnotationsScanner());
 
         Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(SocketEvent.class);
@@ -59,6 +66,51 @@ public class SocketEventRegister {
                 }
             }
         }
+
+        log.info(String.format("Socket server start at port %d", socketIOServer.getConfiguration().getPort()));
+        socketIOServer.start();
+    }
+
+    private void initializeConnectListener() {
+        socketIOServer.addConnectListener(
+                socketIOClient -> {
+                    Map<String, String> authData = getAuthenticationDataFromHandshakeData(socketIOClient);
+                    try {
+                        Long id = Long.parseLong(authData.get("id"));
+                        //String authToken = authData.get("token");
+                        accountManager.add(id, socketIOClient);
+                    } catch (Exception ex) {
+                        socketIOClient.disconnect();
+                    }
+                }
+        );
+
+    }
+
+    private Map<String, String> getAuthenticationDataFromHandshakeData(SocketIOClient client) {
+        Map<String, String> data = new HashMap<>();
+        String userId = client.getHandshakeData().getSingleUrlParam("id");
+        String authToken = client.getHandshakeData().getSingleUrlParam("token");
+        if (userId != null && !userId.trim().isEmpty()) {
+            data.put("id", userId);
+        }
+        if (authToken != null && !authToken.trim().isEmpty()) {
+            data.put("token", authToken);
+        }
+        return data;
+    }
+
+    private void initializeDisconnectListener() {
+        socketIOServer.addDisconnectListener(
+                socketIOClient -> {
+                    Map<String, String> authData = getAuthenticationDataFromHandshakeData(socketIOClient);
+                    try {
+                        Long id = Long.parseLong(authData.get("id"));
+                        accountManager.remove(id);
+                    } catch (Exception ex) {
+                    }
+                }
+        );
     }
 
     private <T> void registerEventListener(String eventName, Class<T> dataType, Object listenerObj) {

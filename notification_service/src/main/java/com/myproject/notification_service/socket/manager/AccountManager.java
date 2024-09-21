@@ -1,7 +1,12 @@
 package com.myproject.notification_service.socket.manager;
 
+import com.corundumstudio.socketio.SocketIOClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author nguyenle
@@ -9,7 +14,33 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AccountManager {
 
+    private final Map<Long, SocketIOClient> mapCode2Client = new HashMap<>();
+
+    public void add(Long code, SocketIOClient client) {
+        if (mapCode2Client.containsKey(code)) {
+            SocketIOClient registeredClient = mapCode2Client.get(code);
+            if (!registeredClient.getSessionId().toString().equals(client.getSessionId().toString())) {
+                registeredClient.disconnect();
+            }
+        }
+        mapCode2Client.put(code, client);
+        log.info(String.format("Client with code : %d, sessionId: %s connected!", code, client.getSessionId().toString()));
+        log.info(String.format("Current client online: %d", mapCode2Client.size()));
+    }
+
+    public void remove(Long code) {
+        if (mapCode2Client.containsKey(code)) {
+            mapCode2Client.remove(code);
+            log.info(String.format("Client with code : %d, disconnected!", code));
+            log.info(String.format("Current client online: %d", mapCode2Client.size()));
+        }
+    }
+
+    public boolean isOnline(Long code) {
+        return mapCode2Client.containsKey(code);
+    }
 
 }
