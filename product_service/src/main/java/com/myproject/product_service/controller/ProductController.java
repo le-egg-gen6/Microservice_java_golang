@@ -1,5 +1,6 @@
 package com.myproject.product_service.controller;
 
+import com.myproject.product_service.dto.ProductDTO;
 import com.myproject.product_service.payload.request.CreateProductRequest;
 import com.myproject.product_service.payload.shared.ApiResponse;
 import com.myproject.product_service.service.ProductService;
@@ -24,6 +25,7 @@ public class ProductController {
     public ResponseEntity<ApiResponse<?>> createNewProduct(
             @RequestBody CreateProductRequest createProductRequest
     ) {
-
+        ProductDTO productDTO = productService.createProduct(createProductRequest);
+        return ResponseEntity.ok(ApiResponse.successResponse(productDTO));
     }
 }

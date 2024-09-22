@@ -3,6 +3,8 @@ package com.myproject.product_service.payload.shared;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 /**
  * @author nguyenle
@@ -25,4 +27,19 @@ public class ApiResponse<T> {
 
     @JsonProperty("result")
     private T result;
+
+    public static ApiResponse<?> successResponse(Object data) {
+        return ApiResponse.builder()
+                .code(HttpStatus.OK.value())
+                .result(data)
+                .build();
+    }
+
+    public static ApiResponse<?> errorResponse(HttpStatus httpStatus, String message) {
+        return ApiResponse.builder()
+                .code(httpStatus.value())
+                .message(message)
+                .build();
+    }
+
 }

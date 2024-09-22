@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author nguyenle
@@ -71,6 +72,14 @@ public class Product extends AbstractBaseEntity {
     )
     @Setter(AccessLevel.NONE)
     private List<Promotion> promotions = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return getId() != null && Objects.equals(getId(), product.getId());
+    }
 
     public void addCategory(Category category) {
         categories.add(category);

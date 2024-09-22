@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author nguyenle
@@ -52,6 +53,15 @@ public class Promotion extends AbstractBaseEntity {
     )
     @Setter(AccessLevel.NONE)
     private List<Product> products = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Promotion promotion = (Promotion) o;
+        return getId() != null && Objects.equals(getId(), promotion.getId());
+    }
+
 
     public void addProduct(Product product) {
         products.add(product);

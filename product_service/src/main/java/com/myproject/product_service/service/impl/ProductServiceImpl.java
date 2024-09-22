@@ -64,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
                 .categories(categories)
                 .build();
         product = productRepository.save(product);
+        code2Product.put(product.getId(), product);
         return productMapper.productToProductDTO(product);
     }
 }
