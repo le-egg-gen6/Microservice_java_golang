@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecurityConstant {
 
-    private String[] PUBLIC_URLS = {};
+    private String[] PUBLIC_URLS = {
+            "/public/**"
+    };
 
     public String[] getPublicUrls() {
         return PUBLIC_URLS;

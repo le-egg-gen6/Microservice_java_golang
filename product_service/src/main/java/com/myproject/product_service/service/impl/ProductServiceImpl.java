@@ -67,4 +67,17 @@ public class ProductServiceImpl implements ProductService {
         code2Product.put(product.getId(), product);
         return productMapper.productToProductDTO(product);
     }
+
+    @Override
+    public ProductDTO getProductById(Long id) {
+        Product product = code2Product.getIfPresent(id);
+        if (product == null) {
+            product = productRepository.findById(id).orElse(null);
+            if (product != null) {
+                code2Product.put(id, product);
+                return productMapper.productToProductDTO(product);
+            }
+        }
+        return null;
+    }
 }

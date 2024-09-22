@@ -10,4 +10,6 @@ public interface ProductService {
 
     ProductDTO createProduct(CreateProductRequest request);
 
+    ProductDTO getProductById(Long id);
+
 }
