@@ -1,0 +1,91 @@
+package com.myproject.notification_service.config.auth_service;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.myproject.notification_service.payload.ApiResponse;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.concurrent.TimeUnit;
+
+/**
+ * @author nguyenle
+ */
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class AuthServiceImpl implements AuthService {
+
+    @Value("${service.auth}")
+    private String authServiceBaseUrl;
+
+    @Value("${internal.secret}")
+    private String internalSecret;
+
+    private final RestTemplate restTemplate;
+
+    private Cache<String, AuthResponse> token2authRespCache = Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .maximumSize(1_000)
+            .build();
+
+    @Override
+    @CircuitBreaker(
+        name = "authService",
+        fallbackMethod = "fallbackValidate"
+    )
+    @Retry(name = "authService")
+    public AuthResponse validate(String token) {
+        AuthResponse authResponse = token2authRespCache.getIfPresent(token);
+        if (authResponse == null) {
+            log.info("Send auth request to Auth Service");
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add("Internal", internalSecret);
+
+            HttpEntity<AuthRequest> request = new HttpEntity<>(
+                    AuthRequest.builder()
+                            .accessToken(token)
+                            .build(),
+                    httpHeaders
+                    );
+
+            ResponseEntity<ApiResponse<AuthResponse>> response = restTemplate.exchange(
+                    authServiceBaseUrl + "/internal/validate",
+                    HttpMethod.POST,
+                    request,
+                    new ParameterizedTypeReference<ApiResponse<AuthResponse>>() {}
+            );
+
+            if (response.getBody() != null) {
+                authResponse = response.getBody().getResult();
+            }
+            if (authResponse != null) {
+                token2authRespCache.put(token, authResponse);
+            }
+        }
+        if (authResponse == null) {
+            return AuthResponse.builder()
+                    .authenticated(false)
+                    .build();
+        }
+        return authResponse;
+    }
+
+    private AuthResponse fallbackValidate(String token, Throwable throwable) {
+        log.info("Auth Service take so much time to response, please check!");
+        return AuthResponse.builder()
+            .authenticated(false)
+            .build();
+    }
+
+}

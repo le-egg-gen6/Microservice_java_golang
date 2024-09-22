@@ -1,8 +1,19 @@
 spring:
+  #Application Config
   application:
     name: notification_service
+  threads:
+    virtual:
+      enabled: true
 
 
 socket-server:
   port: 9999
   host: localhost
+
+#Another Service
+internal:
+  secret: internal_secret
+
+service:
+  auth: //
