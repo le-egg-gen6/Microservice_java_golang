@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,7 +42,32 @@ public class Promotion extends AbstractBaseEntity {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @ManyToMany(mappedBy = "promotions", fetch = FetchType.LAZY)
-    private List<Product> products;
+    @ManyToMany(
+            mappedBy = "promotions",
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
+    @Setter(AccessLevel.NONE)
+    private List<Product> products = new ArrayList<>();
 
+    public void addProduct(Product product) {
+        products.add(product);
+        product.getPromotions().add(this);
+    }
+
+    public void removeProduct(Product product) {
+        products.remove(product);
+        product.getPromotions().remove(this);
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products.forEach(product -> product.getPromotions().remove(this));
+        this.products.clear();
+        if (products != null) {
+            products.forEach(this::addProduct);
+        }
+    }
 }

@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.concurrent.TimeUnit;
 
@@ -46,10 +47,14 @@ public class MediaServiceImpl implements MediaService {
             fallbackMethod = "fallbackSaveMedia"
     )
     @Retry(name = "mediaService")
-    public MediaResponse saveMedia(MediaUploadRequest request) {
+    public MediaResponse saveMedia(MultipartFile file) {
         log.info("Saving media from product service");
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Internal", internalSecret);
+
+        MediaUploadRequest request = MediaUploadRequest.builder()
+                .multipartFile(file)
+                .build();
 
         HttpEntity<MediaUploadRequest> request2Client = new HttpEntity<>(
                 request,
