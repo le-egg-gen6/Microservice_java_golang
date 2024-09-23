@@ -39,7 +39,7 @@ public class Conversation {
 
     @Indexed(background = true)
     @Field("participant_ids")
-    private List<Integer> participantIds = new ArrayList<>();
+    private List<String> participantIds = new ArrayList<>();
 
     @Field("last_message_id")
     private String lastMessageId;

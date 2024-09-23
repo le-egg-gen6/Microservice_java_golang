@@ -28,8 +28,9 @@ public class Message {
 
     @Indexed(background = true)
     @Field("sender_id")
-    private Integer senderId;
+    private String senderId;
 
+    @Field("content")
     private String content;
 
     @Indexed(background = true)

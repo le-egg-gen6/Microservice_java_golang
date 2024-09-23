@@ -33,7 +33,7 @@ public class Notification {
 
     @Indexed(background = true)
     @Field("user_id")
-    private Long userId;
+    private String userId;
 
     @Field("type")
     private Integer type;
