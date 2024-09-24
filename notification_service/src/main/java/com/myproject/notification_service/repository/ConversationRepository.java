@@ -2,6 +2,7 @@ package com.myproject.notification_service.repository;
 
 import com.myproject.notification_service.entity.Conversation;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ConversationRepository extends MongoRepository<Conversation, String> {
+
+	Optional<Conversation> findById(String id);
 
 	// Find all conversations where the given userId is a participant, sorted by modified date desc
 	@Query(value = "{'participant_ids': ?0}", sort = "{'modified_at': -1}")
