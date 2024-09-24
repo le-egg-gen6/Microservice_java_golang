@@ -1,6 +1,7 @@
 package com.myproject.notification_service.socket.manager;
 
 import com.corundumstudio.socketio.SocketIOClient;
+import com.myproject.notification_service.utils.SpringContextUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountManager {
+
+    public static AccountManager getInstance() {
+        return SpringContextUtils.getSingleton(AccountManager.class);
+    }
 
     private final Map<Long, SocketIOClient> mapCode2Client = new HashMap<>();
 
