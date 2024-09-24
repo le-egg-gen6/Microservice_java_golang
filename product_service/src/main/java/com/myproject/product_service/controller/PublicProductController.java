@@ -19,14 +19,11 @@ public class PublicProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/info/{id}")
+    @GetMapping("/info")
     public ResponseEntity<ApiResponse<?>> getProductInfo(
             @RequestParam("id") Long id
     ) {
         ProductDTO productDTO = productService.getProductById(id);
-        if (productDTO == null) {
-
-        }
         ProductResponse response = ProductResponse.builder()
                 .id(productDTO.getId())
                 .name(productDTO.getName())

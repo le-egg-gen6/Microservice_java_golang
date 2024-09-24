@@ -34,9 +34,4 @@ public class CreateProductRequest {
     @JsonProperty("image")
     private MultipartFile image;
 
-    @JsonProperty("categories")
-    @NonNull
-    @NotEmpty
-    private List<CategoryDTO> categories;
-
 }
