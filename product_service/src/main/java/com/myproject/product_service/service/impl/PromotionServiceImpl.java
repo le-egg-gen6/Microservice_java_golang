@@ -7,6 +7,7 @@ import com.myproject.product_service.entity.Promotion;
 import com.myproject.product_service.exception.ItemNotFoundException;
 import com.myproject.product_service.mapper.PromotionMapper;
 import com.myproject.product_service.payload.request.CreatePromotionRequest;
+import com.myproject.product_service.payload.request.UpdatePromotionRequest;
 import com.myproject.product_service.repository.PromotionRepository;
 import com.myproject.product_service.service.PromotionService;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,25 @@ public class PromotionServiceImpl implements PromotionService {
                 throw new ItemNotFoundException();
             }
         }
+        return promotionMapper.promotionToPromotionDTO(promotion);
+    }
+
+    @Override
+    public PromotionDTO updatePromotionInfo(Long id, UpdatePromotionRequest request) {
+        Promotion promotion = code2Promotion.getIfPresent(id);
+        if (promotion == null) {
+            promotion = promotionRepository.findById(id).orElse(null);
+            if (promotion == null) {
+                throw new ItemNotFoundException();
+            }
+        }
+        promotion.setName(request.getName());
+        promotion.setDescription(request.getDescription());
+        promotion.setDiscountPercentage(request.getDiscountPercentage());
+        promotion.setStartDate(request.getStartDate());
+        promotion.setEndDate(request.getEndDate());
+        code2Promotion.put(id, promotion);
+        promotion = promotionRepository.save(promotion);
         return promotionMapper.promotionToPromotionDTO(promotion);
     }
 }

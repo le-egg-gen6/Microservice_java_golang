@@ -6,6 +6,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -29,6 +30,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handlingItemNotFoundException(ItemNotFoundException itemNotFoundException) {
         log.error("Item not found exception: ", itemNotFoundException);
         ApiResponse<?> apiResponse = ApiResponse.errorResponse(HttpStatus.NOT_FOUND, "Item not found!");
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<?>> handlingValidException(MethodArgumentNotValidException methodArgumentNotValidException) {
+        log.error("Validation constraint is violated: ", methodArgumentNotValidException);
+        StringBuilder message = new StringBuilder();
+        methodArgumentNotValidException.getBindingResult().getFieldErrors().forEach(
+                err -> message.append(err.getDefaultMessage())
+        );
+        ApiResponse<?> apiResponse = ApiResponse.errorResponse(HttpStatus.BAD_REQUEST, message.toString());
         return ResponseEntity.ok(apiResponse);
     }
 

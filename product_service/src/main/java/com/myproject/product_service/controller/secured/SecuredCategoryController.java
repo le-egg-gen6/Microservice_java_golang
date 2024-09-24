@@ -2,9 +2,11 @@ package com.myproject.product_service.controller.secured;
 
 import com.myproject.product_service.dto.CategoryDTO;
 import com.myproject.product_service.payload.request.CreateCategoryRequest;
+import com.myproject.product_service.payload.request.UpdateCategoryRequest;
 import com.myproject.product_service.payload.response.CategoryResponse;
 import com.myproject.product_service.payload.shared.ApiResponse;
 import com.myproject.product_service.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +26,7 @@ public class SecuredCategoryController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<?>> createNewCategory(
-            @RequestBody CreateCategoryRequest request
+            @Valid @RequestBody CreateCategoryRequest request
     ) {
         CategoryDTO categoryDTO = categoryService.createCategory(request);
         CategoryResponse response = CategoryResponse.builder()
@@ -34,5 +36,19 @@ public class SecuredCategoryController {
                 .build();
         return ResponseEntity.ok(ApiResponse.successResponse(response));
     }
+
+    @PostMapping("/update")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseEntity<ApiResponse<?>> updateCategory(
+            @RequestParam("id") Long id,
+            @Valid @RequestBody UpdateCategoryRequest request
+    ) {
+        CategoryDTO categoryDTO = categoryService.updateCategoryInfo(id, request);
+        CategoryResponse response = CategoryResponse.builder()
+                .id(categoryDTO.getId())
+                .name(categoryDTO.getName())
+                .description(categoryDTO.getDescription())
+                .build();
+        return ResponseEntity.ok(ApiResponse.successResponse(response));    }
 
 }

@@ -1,6 +1,7 @@
 package com.myproject.product_service.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 /**
@@ -15,9 +16,9 @@ import lombok.*;
 public class CreateCategoryRequest {
 
     @JsonProperty("name")
-    @NonNull
+    @NotBlank(message = "Name is required!")
     private String name;
 
     @JsonProperty("description")
-    private String description;
+    private String description = "";
 }

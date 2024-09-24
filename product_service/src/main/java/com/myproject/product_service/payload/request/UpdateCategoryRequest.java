@@ -1,14 +1,12 @@
 package com.myproject.product_service.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author nguyenle
- * @since 9:47 PM Thu 9/19/2024
+ * @since 7:07 PM Tue 9/24/2024
  */
 @Data
 @Getter
@@ -16,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateProductRequest {
+public class UpdateCategoryRequest {
 
     @JsonProperty("name")
     @NotBlank(message = "Name is required!")
@@ -24,13 +22,5 @@ public class CreateProductRequest {
 
     @JsonProperty("description")
     private String description = "";
-
-    @JsonProperty("price")
-    @NonNull
-    @Min(value = 0, message = "Price must be greater than or equal to 0!")
-    private Long price;
-
-    @JsonProperty("image")
-    private MultipartFile image;
 
 }

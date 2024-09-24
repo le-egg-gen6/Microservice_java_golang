@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author nguyenle
- * @since 9:47 PM Thu 9/19/2024
+ * @since 7:08 PM Tue 9/24/2024
  */
 @Data
 @Getter
@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateProductRequest {
+public class UpdateProductRequest {
 
     @JsonProperty("name")
     @NotBlank(message = "Name is required!")
@@ -32,5 +32,13 @@ public class CreateProductRequest {
 
     @JsonProperty("image")
     private MultipartFile image;
+
+    @JsonProperty("stockQuantity")
+    @Min(value = 0, message = "Stock quantity must be greater than or equal to 0!")
+    private Integer stockQuantity;
+
+    @JsonProperty("likesCount")
+    @Min(value = 0, message = "Like count must be greater than or equal to 0!")
+    private Integer likesCount;
 
 }

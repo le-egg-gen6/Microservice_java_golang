@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 /**
  * @author nguyenle
- * @since 12:28 AM Fri 9/20/2024
+ * @since 7:08 PM Tue 9/24/2024
  */
 @Data
 @Getter
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreatePromotionRequest {
+public class UpdatePromotionRequest {
 
     @JsonProperty("name")
     @NotBlank(message = "Name is required!")

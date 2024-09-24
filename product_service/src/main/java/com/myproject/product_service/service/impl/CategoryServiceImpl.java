@@ -7,6 +7,7 @@ import com.myproject.product_service.entity.Category;
 import com.myproject.product_service.exception.ItemNotFoundException;
 import com.myproject.product_service.mapper.CategoryMapper;
 import com.myproject.product_service.payload.request.CreateCategoryRequest;
+import com.myproject.product_service.payload.request.UpdateCategoryRequest;
 import com.myproject.product_service.repository.CategoryRepository;
 import com.myproject.product_service.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,22 @@ public class CategoryServiceImpl implements CategoryService {
                 throw new ItemNotFoundException();
             }
         }
+        return categoryMapper.categoryToCategoryDTO(category);
+    }
+
+    @Override
+    public CategoryDTO updateCategoryInfo(Long id, UpdateCategoryRequest request) {
+        Category category = code2Category.getIfPresent(id);
+        if (category == null) {
+            category = categoryRepository.findById(id).orElse(null);
+            if (category == null) {
+                throw new ItemNotFoundException();
+            }
+        }
+        category.setName(request.getName());
+        category.setDescription(request.getDescription());
+        code2Category.put(id, category);
+        category = categoryRepository.save(category);
         return categoryMapper.categoryToCategoryDTO(category);
     }
 }
