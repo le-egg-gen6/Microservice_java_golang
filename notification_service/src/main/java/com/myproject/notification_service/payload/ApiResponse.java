@@ -34,9 +34,9 @@ public class ApiResponse<T> {
             .build();
     }
 
-    public static ApiResponse<?> errorResponse(int errorCode, String message) {
+    public static ApiResponse<?> errorResponse(HttpStatus status, String message) {
         return ApiResponse.builder()
-            .code(errorCode)
+            .code(status.value())
             .message(message)
             .build();
     }

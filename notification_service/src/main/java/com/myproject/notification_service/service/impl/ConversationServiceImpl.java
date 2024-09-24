@@ -3,6 +3,7 @@ package com.myproject.notification_service.service.impl;
 import com.myproject.notification_service.config.security.SecurityContextService;
 import com.myproject.notification_service.config.security.UserSimpleDetails;
 import com.myproject.notification_service.entity.Conversation;
+import com.myproject.notification_service.exception.AuthenticationException;
 import com.myproject.notification_service.payload.ConversationResponse;
 import com.myproject.notification_service.repository.ConversationRepository;
 import com.myproject.notification_service.service.ConversationService;
@@ -26,7 +27,7 @@ public class ConversationServiceImpl implements ConversationService {
     public List<ConversationResponse> getAllConversation() {
         UserSimpleDetails userSimpleDetails = securityContextService.getCurrentUser();
         if (userSimpleDetails == null) {
-            throw new Exception();
+            throw new AuthenticationException();
         }
         return getAllConversationByUserId(userSimpleDetails.getId());
     }
