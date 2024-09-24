@@ -21,7 +21,7 @@ public class ConversationController {
     private final ConversationService conversationService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN', 'MANAGER')")
     public ResponseEntity<ApiResponse<?>> getAllConversation() {
         return ResponseEntity.ok(ApiResponse.successResponse(conversationService.getAllConversation()));
     }
