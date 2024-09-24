@@ -26,20 +26,14 @@ public class MessageResponse {
 	@JsonProperty("id")
 	private String id;
 
-	@JsonProperty("userId")
-	private String userId;
+	@JsonProperty("conversationId")
+	private String conversationId;
 
-	@JsonProperty("type")
-	private Integer type;
-
-	@JsonProperty("title")
-	private String title;
+	@JsonProperty("senderId")
+	private String senderId;
 
 	@JsonProperty("content")
 	private String content;
-
-	@JsonProperty("read")
-	private boolean read;
 
 	@JsonProperty("createdAt")
 	@JsonSerialize(using = CustomLocalDateTimeSerializer.class)

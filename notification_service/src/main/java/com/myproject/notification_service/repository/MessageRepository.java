@@ -1,6 +1,7 @@
 package com.myproject.notification_service.repository;
 
 import com.myproject.notification_service.entity.Message;
+import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +11,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface MessageRepository extends MongoRepository<Message, String> {
+
+	Optional<Message> findById(String id);
+
 }

@@ -1,5 +1,10 @@
 package com.myproject.notification_service.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
@@ -22,6 +27,11 @@ import java.util.List;
         @CompoundIndex(def = "{'participant_ids': 1, 'created_at': -1}", background = true),
         @CompoundIndex(def = "{'participant_ids': 1, 'modified_at': -1}", background = true)
 })
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Conversation {
 
     @Id

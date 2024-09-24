@@ -3,9 +3,12 @@ package com.myproject.notification_service.service.impl;
 import com.myproject.notification_service.config.security.SecurityContextService;
 import com.myproject.notification_service.config.security.UserSimpleDetails;
 import com.myproject.notification_service.entity.Conversation;
+import com.myproject.notification_service.entity.Message;
 import com.myproject.notification_service.exception.AuthenticationException;
 import com.myproject.notification_service.payload.ConversationResponse;
+import com.myproject.notification_service.payload.MessageResponse;
 import com.myproject.notification_service.repository.ConversationRepository;
+import com.myproject.notification_service.repository.MessageRepository;
 import com.myproject.notification_service.service.ConversationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,8 @@ public class ConversationServiceImpl implements ConversationService {
     private final SecurityContextService securityContextService;
 
     private final ConversationRepository conversationRepository;
+
+    private final MessageRepository messageRepository;
 
     @Override
     public List<ConversationResponse> getAllConversation() {
@@ -40,7 +45,24 @@ public class ConversationServiceImpl implements ConversationService {
         List<Conversation> conversations = conversationRepository.findByParticipantId(id);
         return conversations.stream().map(
             conversation -> {
+                Message message = messageRepository.findById(conversation.getLastMessageId()).orElse(null);
+                MessageResponse messageResponse = null;
+                if (message != null) {
+                    messageResponse = MessageResponse.builder()
+                        .id(message.getId())
+                        .conversationId(conversation.getId())
+                        .senderId(message.getSenderId())
+                        .content(message.getContent())
+                        .createdAt(message.getCreatedAt())
+                        .build();
+                }
                 return ConversationResponse.builder()
+                    .id(conversation.getId())
+                    .title(conversation.getTitle())
+                    .createdAt(conversation.getCreatedAt())
+                    .modifiedAt(conversation.getModifiedAt())
+                    .participantIds(conversation.getParticipantIds())
+                    .lastMessage(messageResponse)
                     .build();
             }
         ).toList();
