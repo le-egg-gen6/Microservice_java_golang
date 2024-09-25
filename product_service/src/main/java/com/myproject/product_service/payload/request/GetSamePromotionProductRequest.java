@@ -1,6 +1,7 @@
 package com.myproject.product_service.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.myproject.product_service.payload.shared.PagingAndSortingRequest;
 import lombok.*;
 
 /**
@@ -13,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetSamePromotionProductRequest {
+public class GetSamePromotionProductRequest extends PagingAndSortingRequest {
 
     @JsonProperty("promotionId")
     private Long promotionId;

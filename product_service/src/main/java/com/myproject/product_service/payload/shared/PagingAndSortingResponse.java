@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 /**
@@ -26,11 +27,11 @@ public abstract class PagingAndSortingResponse {
     @JsonProperty("sortDirection")
     private String sortDirection;
 
-    public <T> void initPageResponse(Page<T> page) {
-        this.page = page.getNumber() + 1; // Spring Data JPA uses 0-based page numbers
-        this.pageSize = page.getSize();
+    public void initPageResponse(Pageable pageable) {
+        this.page = pageable.getPageNumber(); // Spring Data JPA uses 0-based page numbers
+        this.pageSize = pageable.getPageSize();
 
-        Sort sort = page.getSort();
+        Sort sort = pageable.getSort();
         if (sort.isSorted()) {
             Sort.Order order = sort.iterator().next();
             this.sortBy = order.getProperty();

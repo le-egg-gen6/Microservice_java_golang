@@ -1,6 +1,7 @@
 package com.myproject.product_service.payload.shared;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.PageRequest;
@@ -21,9 +22,11 @@ import java.lang.reflect.Field;
 public abstract class PagingAndSortingRequest {
 
     @JsonProperty("page")
+    @Getter(AccessLevel.NONE)
     private Integer page = 0;
 
     @JsonProperty("pageSize")
+    @Getter(AccessLevel.NONE)
     private Integer pageSize = 10;
 
     @JsonProperty("sortBy")
@@ -38,6 +41,20 @@ public abstract class PagingAndSortingRequest {
         } else {
             return Sort.Direction.ASC;
         }
+    }
+
+    public int getPage() {
+        if (page < 0) {
+            return 0;
+        }
+        return page;
+    }
+
+    public int getPageSize() {
+        if (pageSize <= 0) {
+            pageSize = 10;
+        }
+        return pageSize;
     }
 
     public PageRequest getPageRequest(Class<?> clazz) {
@@ -56,13 +73,7 @@ public abstract class PagingAndSortingRequest {
             }
             sort = Sort.by(getSortDirection(), sortBy);
         }
-        if (page < 0) {
-            page = 0;
-        }
-        if (pageSize < 10) {
-            pageSize = 10;
-        }
-        return PageRequest.of(page, pageSize, sort);
+        return PageRequest.of(getPage(), getPageSize(), sort);
     }
 
 }

@@ -4,7 +4,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.myproject.product_service.config.media_service.MediaResponse;
 import com.myproject.product_service.config.media_service.MediaService;
-import com.myproject.product_service.dto.CategoryDTO;
 import com.myproject.product_service.dto.ProductDTO;
 import com.myproject.product_service.entity.Category;
 import com.myproject.product_service.entity.Product;
@@ -15,12 +14,12 @@ import com.myproject.product_service.payload.request.UpdateProductRequest;
 import com.myproject.product_service.repository.CategoryRepository;
 import com.myproject.product_service.repository.ProductRepository;
 import com.myproject.product_service.service.ProductService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -108,7 +107,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getSameCategoryProducts(Long categoryId) {
-        return null;
+    public List<ProductDTO> getSameCategoryProducts(Long categoryId, Pageable pageable) {
+        List<Product> products = productRepository.findProductsByCategoryId(categoryId, pageable).stream().toList();
+        return productMapper.productsToProductDTOs(products);
+    }
+
+    @Override
+    public List<ProductDTO> getSamePromotionProducts(Long promotionId, Pageable pageable) {
+        List<Product> products = productRepository.findProductsByPromotionId(promotionId, pageable).stream().toList();
+        return productMapper.productsToProductDTOs(products);
     }
 }
