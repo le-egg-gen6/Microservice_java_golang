@@ -10,6 +10,7 @@ import java.io.IOException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -58,7 +59,7 @@ public class InternalServiceFilter extends OncePerRequestFilter {
 	private void handleUnauthorizedAccess(HttpServletResponse response) throws IOException {
 		ApiResponse<Object> apiResponse = new ApiResponse<>(401, "Unauthorized access", null);
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.setStatus(HttpServletResponse.SC_OK);
 		objectMapper.writeValue(response.getOutputStream(), apiResponse);
 	}
 }

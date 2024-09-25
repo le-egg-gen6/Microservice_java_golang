@@ -13,7 +13,8 @@ public class SecurityConstant {
     private String INTERNAL_SECRET;
 
     private String[] PUBLIC_URLS = {
-            "/public/**"
+            "/public/**",
+            "/internal/**"
     };
 
     public String getInternalSecret() {
