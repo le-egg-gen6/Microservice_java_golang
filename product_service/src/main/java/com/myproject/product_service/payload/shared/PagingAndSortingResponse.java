@@ -3,6 +3,8 @@ package com.myproject.product_service.payload.shared;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 
 /**
  * @author nguyenle
@@ -24,4 +26,18 @@ public abstract class PagingAndSortingResponse {
     @JsonProperty("sortDirection")
     private String sortDirection;
 
+    public <T> void initPageResponse(Page<T> page) {
+        this.page = page.getNumber() + 1; // Spring Data JPA uses 0-based page numbers
+        this.pageSize = page.getSize();
+
+        Sort sort = page.getSort();
+        if (sort.isSorted()) {
+            Sort.Order order = sort.iterator().next();
+            this.sortBy = order.getProperty();
+            this.sortDirection = order.getDirection().name();
+        } else {
+            this.sortBy = null;
+            this.sortDirection = null;
+        }
+    }
 }

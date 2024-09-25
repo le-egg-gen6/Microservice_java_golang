@@ -106,4 +106,9 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.productToProductDTO(product);
 
     }
+
+    @Override
+    public List<ProductDTO> getSameCategoryProducts(Long categoryId) {
+        return null;
+    }
 }

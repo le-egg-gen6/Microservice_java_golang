@@ -1,7 +1,7 @@
 package com.myproject.product_service.controller;
 
 import com.myproject.product_service.dto.ProductDTO;
-import com.myproject.product_service.payload.request.CreateProductRequest;
+import com.myproject.product_service.payload.request.GetSameCategoryProductRequest;
 import com.myproject.product_service.payload.response.ProductResponse;
 import com.myproject.product_service.payload.shared.ApiResponse;
 import com.myproject.product_service.service.ProductService;
@@ -36,5 +36,12 @@ public class PublicProductController {
                 .promotions(productDTO.getPromotions())
                 .build();
         return ResponseEntity.ok(ApiResponse.successResponse(response));
+    }
+
+    @PostMapping("/find-by-category")
+    public ResponseEntity<ApiResponse<?>> findProductsByCategory(
+            @RequestBody GetSameCategoryProductRequest request
+    ) {
+
     }
 }
