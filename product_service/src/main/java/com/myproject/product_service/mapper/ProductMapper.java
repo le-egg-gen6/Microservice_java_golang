@@ -22,14 +22,10 @@ public interface ProductMapper {
 
     @Mapping(target = "categories", qualifiedByName = "categoryToDTO")
     @Mapping(target = "promotions", qualifiedByName = "promotionToDTO")
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "modifiedAt", ignore = true)
     ProductDTO productToProductDTO(Product product);
 
     @Mapping(target = "categories", qualifiedByName = "categoryToEntity")
     @Mapping(target = "promotions", qualifiedByName = "promotionToEntity")
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "modifiedAt", ignore = true)
     Product productDTOToProduct(ProductDTO productDTO);
 
     List<ProductDTO> productsToProductDTOs(List<Product> products);

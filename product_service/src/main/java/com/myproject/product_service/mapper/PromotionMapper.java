@@ -18,15 +18,9 @@ import java.util.Set;
 public interface PromotionMapper {
 
     @Named("promotionToDTO")
-    @Mapping(target = "products", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "modifiedAt", ignore = true)
     PromotionDTO promotionToPromotionDTO(Promotion promotion);
 
     @Named("promotionToEntity")
-    @Mapping(target = "products", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "modifiedAt", ignore = true)
     Promotion promotionDTOToPromotion(PromotionDTO promotionDTO);
 
     List<PromotionDTO> promotionsToPromotionDTOs(List<Promotion> promotions);
