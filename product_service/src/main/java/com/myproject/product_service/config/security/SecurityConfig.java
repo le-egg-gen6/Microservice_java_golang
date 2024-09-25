@@ -21,6 +21,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    private final InternalServiceFilter internalServiceFilter;
+
     @Bean
     public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
         http
@@ -30,8 +32,8 @@ public class SecurityConfig {
                                 .requestMatchers(securityConstant.getPublicUrls()).permitAll()
                                 .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(internalServiceFilter, JwtAuthenticationFilter.class);
         return http.build();
     }
 
