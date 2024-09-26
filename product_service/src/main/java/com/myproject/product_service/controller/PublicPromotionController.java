@@ -1,15 +1,16 @@
 package com.myproject.product_service.controller;
 
 import com.myproject.product_service.dto.PromotionDTO;
+import com.myproject.product_service.entity.Promotion;
+import com.myproject.product_service.payload.response.ListPromotionResponse;
 import com.myproject.product_service.payload.response.PromotionResponse;
 import com.myproject.product_service.payload.shared.ApiResponse;
+import com.myproject.product_service.payload.shared.PagingAndSortingRequest;
 import com.myproject.product_service.service.PromotionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author nguyenle
@@ -35,6 +36,16 @@ public class PublicPromotionController {
                 .startDate(promotionDTO.getStartDate())
                 .endDate(promotionDTO.getEndDate())
                 .build();
+        return ResponseEntity.ok(ApiResponse.successResponse(response));
+    }
+
+    @PostMapping("/find-all")
+    public ResponseEntity<ApiResponse<?>> getAllPromotion(
+            @RequestBody PagingAndSortingRequest request
+    ) {
+        Pageable pageable = request.getPageRequest(Promotion.class);
+        ListPromotionResponse response = new ListPromotionResponse();
+        response.setPromotions(promotionService.getAllPromotion(pageable));
         return ResponseEntity.ok(ApiResponse.successResponse(response));
     }
 }

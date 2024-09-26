@@ -5,13 +5,11 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.myproject.product_service.config.media_service.MediaResponse;
 import com.myproject.product_service.config.media_service.MediaService;
 import com.myproject.product_service.dto.ProductDTO;
-import com.myproject.product_service.entity.Category;
 import com.myproject.product_service.entity.Product;
 import com.myproject.product_service.exception.ItemNotFoundException;
 import com.myproject.product_service.mapper.ProductMapper;
 import com.myproject.product_service.payload.request.CreateProductRequest;
 import com.myproject.product_service.payload.request.UpdateProductRequest;
-import com.myproject.product_service.repository.CategoryRepository;
 import com.myproject.product_service.repository.ProductRepository;
 import com.myproject.product_service.service.ProductService;
 import java.util.List;
@@ -31,8 +29,6 @@ import java.util.concurrent.TimeUnit;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-
-    private final CategoryRepository categoryRepository;
 
     private final MediaService mediaService;
 
@@ -107,14 +103,35 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDTO> getAllProduct(Pageable pageable) {
+        List<Product> products = productRepository.getAllProduct(pageable).stream().toList();
+        return products.stream().map(
+                product -> {
+                    code2Product.put(product.getId(), product);
+                    return productMapper.productToProductDTO(product);
+                }
+        ).toList();
+    }
+
+    @Override
     public List<ProductDTO> getSameCategoryProducts(Long categoryId, Pageable pageable) {
         List<Product> products = productRepository.findProductsByCategoryId(categoryId, pageable).stream().toList();
-        return productMapper.productsToProductDTOs(products);
+        return products.stream().map(
+                product -> {
+                    code2Product.put(product.getId(), product);
+                    return productMapper.productToProductDTO(product);
+                }
+        ).toList();
     }
 
     @Override
     public List<ProductDTO> getSamePromotionProducts(Long promotionId, Pageable pageable) {
         List<Product> products = productRepository.findProductsByPromotionId(promotionId, pageable).stream().toList();
-        return productMapper.productsToProductDTOs(products);
+        return products.stream().map(
+                product -> {
+                    code2Product.put(product.getId(), product);
+                    return productMapper.productToProductDTO(product);
+                }
+        ).toList();
     }
 }

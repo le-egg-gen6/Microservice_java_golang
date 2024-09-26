@@ -21,6 +21,9 @@ public interface ProductRepository extends
         PagingAndSortingRepository<Product, Long>,
         ListPagingAndSortingRepository<Product, Long>
 {
+    @Query("SELECT DISTINCT p FROM Product p")
+    Page<Product> getAllProduct(Pageable pageable);
+
     // Tìm sản phẩm theo category với phân trang
     @Query("SELECT DISTINCT p FROM Product p JOIN FETCH p.categories c WHERE c.id = :categoryId")
     Page<Product> findProductsByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);

@@ -19,7 +19,7 @@ import java.lang.reflect.Field;
 * */
 @Getter
 @Setter
-public abstract class PagingAndSortingRequest {
+public class PagingAndSortingRequest {
 
     @JsonProperty("page")
     @Getter(AccessLevel.NONE)

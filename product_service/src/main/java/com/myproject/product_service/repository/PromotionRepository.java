@@ -22,6 +22,9 @@ public interface PromotionRepository extends
         PagingAndSortingRepository<Promotion, Long>,
         ListPagingAndSortingRepository<Promotion, Long>
 {
+    @Query("SELECT pr FROM Promotion pr")
+    Page<Promotion> getAllPromotion(Pageable pageable);
+
     // Lấy ra các Promotion của 1 Product cho trước
     @Query("SELECT DISTINCT pr FROM Promotion pr JOIN pr.products p WHERE p.id = :productId")
     List<Promotion> findPromotionsByProductId(@Param("productId") Long productId);

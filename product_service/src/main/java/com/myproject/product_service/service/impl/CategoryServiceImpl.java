@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -44,6 +45,17 @@ public class CategoryServiceImpl implements CategoryService {
         category = categoryRepository.save(category);
         code2Category.put(category.getId(), category);
         return categoryMapper.categoryToCategoryDTO(category);
+    }
+
+    @Override
+    public List<CategoryDTO> getAllCategory() {
+        List<Category> categories = categoryRepository.getAllCategory();
+        return categories.stream().map(
+                category -> {
+                    code2Category.put(category.getId(), category);
+                    return categoryMapper.categoryToCategoryDTO(category);
+                }
+        ).toList();
     }
 
     @Override

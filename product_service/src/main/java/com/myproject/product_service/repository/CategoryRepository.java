@@ -23,6 +23,9 @@ public interface CategoryRepository extends
         PagingAndSortingRepository<Category, Long>,
         ListPagingAndSortingRepository<Category, Long>
 {
+    @Query("SELECT c FROM Category c")
+    List<Category> getAllCategory();
+
     // Lấy ra các Category của một Product cho trước
     @Query("SELECT c FROM Category c JOIN c.products p WHERE p.id = :productId")
     List<Category> findCategoriesByProductId(@Param("productId") Long productId);

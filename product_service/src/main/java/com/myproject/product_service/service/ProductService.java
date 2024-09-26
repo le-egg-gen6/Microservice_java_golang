@@ -17,6 +17,8 @@ public interface ProductService {
 
     ProductDTO updateProductInfo(Long id, UpdateProductRequest request);
 
+    List<ProductDTO> getAllProduct(Pageable pageable);
+
     List<ProductDTO> getSameCategoryProducts(Long categoryId, Pageable pageable);
 
     List<ProductDTO> getSamePromotionProducts(Long promotionId, Pageable pageable);

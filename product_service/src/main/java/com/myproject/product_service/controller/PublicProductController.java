@@ -7,9 +7,11 @@ import com.myproject.product_service.entity.Product;
 import com.myproject.product_service.payload.request.GetSameCategoryProductRequest;
 import com.myproject.product_service.payload.request.GetSamePromotionProductRequest;
 import com.myproject.product_service.payload.response.CategoryWithProductResponse;
+import com.myproject.product_service.payload.response.ListProductResponse;
 import com.myproject.product_service.payload.response.ProductResponse;
 import com.myproject.product_service.payload.response.PromotionWithProductResponse;
 import com.myproject.product_service.payload.shared.ApiResponse;
+import com.myproject.product_service.payload.shared.PagingAndSortingRequest;
 import com.myproject.product_service.service.CategoryService;
 import com.myproject.product_service.service.ProductService;
 import com.myproject.product_service.service.PromotionService;
@@ -17,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author nguyenle
@@ -48,6 +52,17 @@ public class PublicProductController {
                 .categories(productDTO.getCategories())
                 .promotions(productDTO.getPromotions())
                 .build();
+        return ResponseEntity.ok(ApiResponse.successResponse(response));
+    }
+
+    @PostMapping("/find-all")
+    public ResponseEntity<ApiResponse<?>> findAllProduct(
+            @RequestBody PagingAndSortingRequest request
+    ) {
+        Pageable pageable = request.getPageRequest(Product.class);
+        ListProductResponse response = new ListProductResponse();
+        response.initPageResponse(pageable);
+        response.setProducts(productService.getAllProduct(pageable));
         return ResponseEntity.ok(ApiResponse.successResponse(response));
     }
 

@@ -12,8 +12,10 @@ import com.myproject.product_service.repository.PromotionRepository;
 import com.myproject.product_service.service.PromotionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,6 +47,18 @@ public class PromotionServiceImpl implements PromotionService {
         promotion = promotionRepository.save(promotion);
         code2Promotion.put(promotion.getId(), promotion);
         return promotionMapper.promotionToPromotionDTO(promotion);
+    }
+
+    @Override
+    public List<PromotionDTO> getAllPromotion(Pageable pageable) {
+        List<Promotion> promotions = promotionRepository.getAllPromotion(pageable).stream().toList();
+        return promotions.stream().map(
+                promotion -> {
+                    code2Promotion.put(promotion.getId(), promotion);
+                    return promotionMapper.promotionToPromotionDTO(promotion);
+                }
+        ).toList();
+
     }
 
     @Override
