@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ChatMessageManager {
 
+    private final AccountManager accountManager;
+
     public static ChatMessageManager getInstance() {
         return SpringContextUtils.getSingleton(ChatMessageManager.class);
     }
