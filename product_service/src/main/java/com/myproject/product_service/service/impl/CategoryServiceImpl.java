@@ -87,4 +87,15 @@ public class CategoryServiceImpl implements CategoryService {
         category = categoryRepository.save(category);
         return categoryMapper.categoryToCategoryDTO(category);
     }
+
+    @Override
+    public List<CategoryDTO> getProductCategories(Long productId) {
+        List<Category> categories = categoryRepository.findCategoriesByProductId(productId);
+        return categories.stream().map(
+                category -> {
+                    code2Category.put(category.getId(), category);
+                    return categoryMapper.categoryToCategoryDTO(category);
+                }
+        ).toList();
+    }
 }

@@ -20,4 +20,6 @@ public interface CategoryService {
 
     CategoryDTO updateCategoryInfo(Long id, UpdateCategoryRequest request);
 
+    List<CategoryDTO> getProductCategories(Long productId);
+
 }

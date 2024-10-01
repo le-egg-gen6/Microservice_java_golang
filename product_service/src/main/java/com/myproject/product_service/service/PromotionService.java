@@ -20,4 +20,6 @@ public interface PromotionService {
 
     PromotionDTO updatePromotionInfo(Long id, UpdatePromotionRequest request);
 
+    List<PromotionDTO> getProductPromotions(Long productId);
+
 }

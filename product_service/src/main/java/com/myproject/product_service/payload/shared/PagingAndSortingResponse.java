@@ -21,6 +21,9 @@ public abstract class PagingAndSortingResponse {
     @JsonProperty("pageSize")
     private Integer pageSize;
 
+    @JsonProperty("totalPage")
+    private Integer totalPage;
+
     @JsonProperty("sortBy")
     private String sortBy;
 

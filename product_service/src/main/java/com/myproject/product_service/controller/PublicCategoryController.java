@@ -32,8 +32,15 @@ public class PublicCategoryController {
         return ResponseEntity.ok(ApiResponse.successResponse(response));
     }
 
-    @PostMapping("find-all")
-    public ResponseEntity<ApiResponse<?>> findAllCategory() {
+    @GetMapping("/find-all")
+    public ResponseEntity<ApiResponse<?>> getAllCategory() {
         return ResponseEntity.ok(ApiResponse.successResponse(categoryService.getAllCategory()));
+    }
+
+    @GetMapping("/find-by-product")
+    public ResponseEntity<ApiResponse<?>> findCategoriesOfExistedProduct(
+            @RequestParam("id") Long id
+    ) {
+        return ResponseEntity.ok(ApiResponse.successResponse(categoryService.getProductCategories(id)));
     }
 }

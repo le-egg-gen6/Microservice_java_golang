@@ -93,4 +93,15 @@ public class PromotionServiceImpl implements PromotionService {
         promotion = promotionRepository.save(promotion);
         return promotionMapper.promotionToPromotionDTO(promotion);
     }
+
+    @Override
+    public List<PromotionDTO> getProductPromotions(Long productId) {
+        List<Promotion> promotions = promotionRepository.findPromotionsByProductId(productId);
+        return promotions.stream().map(
+                promotion -> {
+                    code2Promotion.put(promotion.getId(), promotion);
+                    return promotionMapper.promotionToPromotionDTO(promotion);
+                }
+        ).toList();
+    }
 }
