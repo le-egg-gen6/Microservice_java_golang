@@ -22,6 +22,9 @@ public interface PromotionRepository extends
         PagingAndSortingRepository<Promotion, Long>,
         ListPagingAndSortingRepository<Promotion, Long>
 {
+
+    List<Promotion> findByIdIn(List<Long> ids);
+
     @Query("SELECT pr FROM Promotion pr")
     Page<Promotion> getAllPromotion(Pageable pageable);
 

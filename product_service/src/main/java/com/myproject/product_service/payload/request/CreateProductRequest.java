@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * @author nguyenle
  * @since 9:47 PM Thu 9/19/2024
@@ -32,5 +34,11 @@ public class CreateProductRequest {
 
     @JsonProperty("image")
     private MultipartFile image;
+
+    @JsonProperty("categoryIds")
+    private List<Long> categoryIds;
+
+    @JsonProperty("promotionIds")
+    private List<Long> promotionIds;
 
 }

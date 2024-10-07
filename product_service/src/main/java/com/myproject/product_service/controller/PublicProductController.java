@@ -20,8 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * @author nguyenle
  */
@@ -40,6 +38,26 @@ public class PublicProductController {
     public ResponseEntity<ApiResponse<?>> getProductInfo(
             @RequestParam("id") Long id
     ) {
+        ProductDTO productDTO = productService.getProductById(id);
+        ProductResponse response = ProductResponse.builder()
+                .id(productDTO.getId())
+                .name(productDTO.getName())
+                .description(productDTO.getDescription())
+                .price(productDTO.getPrice())
+                .stockQuantity(productDTO.getStockQuantity())
+                .imageUrl(productDTO.getImageUrl())
+                .likesCount(productDTO.getLikesCount())
+                .categories(productDTO.getCategories())
+                .promotions(productDTO.getPromotions())
+                .build();
+        return ResponseEntity.ok(ApiResponse.successResponse(response));
+    }
+
+    @GetMapping("/like")
+    public ResponseEntity<ApiResponse<?>> likeProduct(
+            @RequestParam("id") Long id
+    ) {
+        productService.likeProduct(id);
         ProductDTO productDTO = productService.getProductById(id);
         ProductResponse response = ProductResponse.builder()
                 .id(productDTO.getId())
