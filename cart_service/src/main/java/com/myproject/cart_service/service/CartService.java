@@ -9,6 +9,15 @@ public interface CartService {
 
     void saveAsync(Cart cart);
 
-    Cart getCart(String userId);
+    Cart getCartByUserId(String userId);
 
+    Cart getCartByCartId(String cartId);
+
+    void increaseItemQuantity(String cartId, Long itemId);
+
+    void decreaseItemQuantity(String cartId, Long itemId);
+
+    void setItemQuantity(String cartId, Long itemId, Integer quantity);
+
+    void confirmPurchase(String cartId);
 }

@@ -51,4 +51,8 @@ public class Cart {
     @Field("fail_reasons")
     private List<String> failReasons = new ArrayList<>();
 
+    public boolean isCartModifiable() {
+        return state == CartState.UNCONFIRMED.getValue();
+    }
+
 }
