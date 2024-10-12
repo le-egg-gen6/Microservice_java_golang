@@ -5,7 +5,9 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.myproject.cart_service.entity.Cart;
 import com.myproject.cart_service.entity.CartState;
 import com.myproject.cart_service.exception.ItemNotFoundException;
+import com.myproject.cart_service.kafka.KafkaMessageConverter;
 import com.myproject.cart_service.kafka.KafkaProducerService;
+import com.myproject.cart_service.kafka.messages.KafkaCreatePaymentMessage;
 import com.myproject.cart_service.repository.CartRepository;
 import com.myproject.cart_service.service.CartService;
 import jakarta.annotation.PostConstruct;
@@ -157,6 +159,13 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void confirmPurchase(String cartId) {
-
+        Cart cart = getCartByCartId(cartId);
+        if (!cart.isCartModifiable()) {
+            return;
+        }
+        KafkaCreatePaymentMessage message = KafkaMessageConverter.createPaymentMessage(cart);
+        addAsynchronousTask(() -> kafkaProducerService.sendMessage("payment_request", message));
+        cart.setState(CartState.PROCESSING.getValue());
+        saveAsync(cart);
     }
 }
