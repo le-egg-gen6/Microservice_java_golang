@@ -64,10 +64,49 @@ public class ProductServiceImpl implements ProductService {
         return response.getBody().getResult();
     }
 
+    @Override
+    @CircuitBreaker(
+            name = "productService",
+            fallbackMethod = "fallbackCalculateCartPrice"
+    )
+    @Retry(name = "productService")
+    public CalculateCartPriceResponse calculateCartPrice(Map<Long, Integer> products) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Internal", internalSecret);
+
+        HttpEntity<CalculateCartPriceRequest> requestHttpEntity = new HttpEntity<>(
+                CalculateCartPriceRequest.builder()
+                        .products(products)
+                        .build(),
+                httpHeaders
+        );
+
+        ResponseEntity<ApiResponse<CalculateCartPriceResponse>> response = restTemplate.exchange(
+                productServiceBaseUrl + "",
+                HttpMethod.POST,
+                requestHttpEntity,
+                new ParameterizedTypeReference<ApiResponse<CalculateCartPriceResponse>>() {}
+        );
+
+        if (response.getBody() == null) {
+            return CalculateCartPriceResponse.builder()
+                    .price(-1.0)
+                    .build();
+        }
+
+        return response.getBody().getResult();
+    }
+
     private ValidateCartResponse fallbackValidate(Map<Long, Integer> products) {
         return ValidateCartResponse.builder()
                 .success(false)
                 .invalidProducts(products)
+                .build();
+    }
+
+    private CalculateCartPriceResponse fallbackCalculateCartPrice(Map<Long, Integer> products) {
+        return CalculateCartPriceResponse.builder()
+                .price(-1.0)
                 .build();
     }
 

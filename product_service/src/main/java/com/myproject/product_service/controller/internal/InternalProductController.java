@@ -1,7 +1,9 @@
 package com.myproject.product_service.controller.internal;
 
 import com.myproject.product_service.entity.Product;
+import com.myproject.product_service.payload.request.CalculateCartPriceRequest;
 import com.myproject.product_service.payload.request.ValidateCartRequest;
+import com.myproject.product_service.payload.response.CalculateCartPriceResponse;
 import com.myproject.product_service.payload.response.ValidateCartResponse;
 import com.myproject.product_service.payload.shared.ApiResponse;
 import com.myproject.product_service.service.ProductService;
@@ -45,5 +47,19 @@ public class InternalProductController {
 			}
 		}
 		return ResponseEntity.ok(ApiResponse.successResponse(validateCartResponse));
+	}
+
+	@PostMapping("/calulate")
+	public ResponseEntity<ApiResponse<?>> calculateCartPrice(
+			@RequestBody CalculateCartPriceRequest request
+	) {
+		double price = 0d;
+		for (Map.Entry<Long, Integer> pair : request.getProducts().entrySet()) {
+			price += productService.calculateProductPrice(pair.getKey()) * pair.getValue();
+		}
+		CalculateCartPriceResponse response = CalculateCartPriceResponse.builder()
+				.price(price)
+				.build();
+		return ResponseEntity.ok(ApiResponse.successResponse(price));
 	}
 }

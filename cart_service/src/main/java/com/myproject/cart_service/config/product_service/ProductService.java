@@ -10,4 +10,6 @@ public interface ProductService {
 
     ValidateCartResponse validate(Map<Long, Integer> products);
 
+    CalculateCartPriceResponse calculateCartPrice(Map<Long, Integer> products);
+
 }

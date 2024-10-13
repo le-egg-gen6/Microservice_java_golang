@@ -2,6 +2,7 @@ package com.myproject.cart_service.service.impl;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.myproject.cart_service.config.product_service.ProductService;
 import com.myproject.cart_service.entity.Cart;
 import com.myproject.cart_service.entity.CartState;
 import com.myproject.cart_service.exception.ItemNotFoundException;
@@ -33,6 +34,8 @@ public class CartServiceImpl implements CartService {
     private final int THREAD_LIVE_TIME_IN_MIN = 1;
 
     private final CartRepository cartRepository;
+
+    private final ProductService productService;
 
     private final KafkaProducerService kafkaProducerService;
 
@@ -158,14 +161,23 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void confirmPurchase(String cartId) {
+    public int confirmPurchase(String cartId) {
         Cart cart = getCartByCartId(cartId);
         if (!cart.isCartModifiable()) {
-            return;
+            return -1;
         }
+        if (!productService.validate(cart.getProducts()).isSuccess()) {
+            return -2;
+        }
+        double price = productService.calculateCartPrice(cart.getProducts()).getPrice();
+        if (price == -1) {
+            return -3;
+        }
+        cart.setPrice(price);
         KafkaCreatePaymentMessage message = KafkaMessageConverter.createPaymentMessage(cart);
         addAsynchronousTask(() -> kafkaProducerService.sendMessage("payment_request", message));
         cart.setState(CartState.PROCESSING.getValue());
         saveAsync(cart);
+        return 0;
     }
 }

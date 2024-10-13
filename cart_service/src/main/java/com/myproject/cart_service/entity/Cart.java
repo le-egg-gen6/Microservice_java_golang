@@ -32,6 +32,9 @@ public class Cart {
     @Field("user_id")
     private String userId;
 
+    @Field("price")
+    private Double price;
+
     @Field("products")
     private Map<Long, Integer> products = new HashMap<>();
 

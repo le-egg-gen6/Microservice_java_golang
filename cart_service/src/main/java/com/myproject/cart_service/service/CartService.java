@@ -19,5 +19,5 @@ public interface CartService {
 
     void setItemQuantity(String cartId, Long itemId, Integer quantity);
 
-    void confirmPurchase(String cartId);
+    int confirmPurchase(String cartId);
 }

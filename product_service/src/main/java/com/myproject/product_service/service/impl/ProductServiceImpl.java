@@ -15,6 +15,8 @@ import com.myproject.product_service.payload.request.UpdateProductRequest;
 import com.myproject.product_service.repository.ProductRepository;
 import com.myproject.product_service.service.CategoryService;
 import com.myproject.product_service.service.ProductService;
+
+import java.util.Comparator;
 import java.util.List;
 
 import com.myproject.product_service.service.PromotionService;
@@ -220,5 +222,20 @@ public class ProductServiceImpl implements ProductService {
                     return productMapper.productToProductDTO(product);
                 }
         ).toList();
+    }
+
+    @Override
+    public Double calculateProductPrice(Long productId) {
+        Product product = getProduct(productId);
+        if (product == null) {
+            return 0.0;
+        }
+        Promotion highestPromotion = product.getPromotions().stream()
+                .max(Comparator.comparing(Promotion::getDiscountPercentage))
+                .orElse(null);
+        if (highestPromotion == null) {
+            return Double.valueOf(product.getPrice());
+        }
+        return product.getPrice() * (100.0d - highestPromotion.getDiscountPercentage()) / 100.0d;
     }
 }

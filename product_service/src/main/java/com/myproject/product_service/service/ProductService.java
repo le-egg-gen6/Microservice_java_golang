@@ -30,4 +30,6 @@ public interface ProductService {
 
     List<ProductDTO> getSamePromotionProducts(Long promotionId, Pageable pageable);
 
+    Double calculateProductPrice(Long productId);
+
 }
