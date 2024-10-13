@@ -16,7 +16,7 @@ public class EventHandleCreatePaymentMessage {
 
     @Async
     @EventListener
-    public void handleHandleCreatePaymentMessage(KafkaCreatePaymentMessage message) {
+    public void handleCreatePaymentMessage(KafkaCreatePaymentMessage message) {
 
     }
 
