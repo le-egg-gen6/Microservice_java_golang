@@ -1,6 +1,6 @@
 package com.myproject.notification_service.socket.message.cs;
 
-import com.myproject.notification_service.socket.event.EventConstant;
+import com.myproject.notification_service.socket.config.EventConstant;
 import com.myproject.notification_service.socket.message.SocketMessage;
 
 /**
@@ -10,6 +10,6 @@ import com.myproject.notification_service.socket.message.SocketMessage;
 public class CSChatMessage extends SocketMessage {
     @Override
     public String getEvent() {
-        return EventConstant.CHAT_MESSAGE;
+        return EventConstant.CS_CHAT_MESSAGE;
     }
 }

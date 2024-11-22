@@ -29,6 +29,11 @@ public class ConversationServiceImpl implements ConversationService {
     private final MessageRepository messageRepository;
 
     @Override
+    public Conversation getConversationById(String conversationId) {
+        return conversationRepository.findById(conversationId).orElse(null);
+    }
+
+    @Override
     public List<ConversationResponse> getAllConversation() {
         UserSimpleDetails userSimpleDetails = securityContextService.getCurrentUser();
         if (userSimpleDetails == null) {

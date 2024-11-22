@@ -76,8 +76,11 @@ public class SocketEventRegister {
                 socketIOClient -> {
                     Map<String, String> authData = getAuthenticationDataFromHandshakeData(socketIOClient);
                     try {
-                        Long id = Long.parseLong(authData.get("id"));
-                        //String authToken = authData.get("token");
+                        String id = authData.get("id");
+                        String authToken = authData.get("token");
+                        if (!accountManager.authorizedSocketRequest(id, authToken)) {
+                            socketIOClient.disconnect();
+                        }
                         accountManager.add(id, socketIOClient);
                     } catch (Exception ex) {
                         socketIOClient.disconnect();
@@ -105,7 +108,7 @@ public class SocketEventRegister {
                 socketIOClient -> {
                     Map<String, String> authData = getAuthenticationDataFromHandshakeData(socketIOClient);
                     try {
-                        Long id = Long.parseLong(authData.get("id"));
+                        String id = authData.get("id");
                         accountManager.remove(id);
                     } catch (Exception ex) {
                     }
