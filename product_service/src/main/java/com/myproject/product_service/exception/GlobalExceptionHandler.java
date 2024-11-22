@@ -1,6 +1,7 @@
 package com.myproject.product_service.exception;
 
 import com.myproject.product_service.payload.shared.ApiResponse;
+import jakarta.transaction.TransactionalException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -41,6 +42,13 @@ public class GlobalExceptionHandler {
                 err -> message.append(err.getDefaultMessage())
         );
         ApiResponse<?> apiResponse = ApiResponse.errorResponse(HttpStatus.BAD_REQUEST, message.toString());
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @ExceptionHandler(value = TransactionalException.class)
+    public ResponseEntity<ApiResponse<?>> handlingTransactionalException(TransactionalException transactionalException) {
+        log.error("Transactional exception occurred: " + transactionalException);
+        ApiResponse<?> apiResponse = ApiResponse.errorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred, please try again");
         return ResponseEntity.ok(apiResponse);
     }
 

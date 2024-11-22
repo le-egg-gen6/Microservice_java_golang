@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class NotificationManager {
 
+    private final AccountManager accountManager;
+
     public static NotificationManager getInstance() {
         return SpringContextUtils.getSingleton(NotificationManager.class);
     }

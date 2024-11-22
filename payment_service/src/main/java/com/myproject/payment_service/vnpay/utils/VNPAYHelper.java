@@ -1,30 +1,15 @@
 package com.myproject.payment_service.vnpay.utils;
 
-import com.myproject.payment_service.vnpay.config.VnpayConfig;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import lombok.experimental.UtilityClass;
 
 /**
  * @author nguyenle
- * @since 7:37 AM Thu 9/12/2024
+ * @since 10:06 PM Sun 10/13/2024
  */
-@Component
-@RequiredArgsConstructor
-public class VnpayUtils {
+@UtilityClass
+public class VNPAYHelper {
 
-    private final VnpayConfig vnpayConfig;
-
-    public String generateDate(boolean forExpire) {
+    public static String generateDate(boolean forExpire) {
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -38,7 +23,7 @@ public class VnpayUtils {
         return formatter.format(cld.getTime());
     }
 
-    public String md5(String message) {
+    public static String md5(String message) {
 
         String digest = null;
         try {
@@ -63,7 +48,7 @@ public class VnpayUtils {
 
     }
 
-    public String Sha256(String message) {
+    public static String Sha256(String message) {
 
         String digest = null;
         try {
@@ -89,7 +74,7 @@ public class VnpayUtils {
     }
 
     //Util for VNPAY
-    public String hashAllFields(Map fields) {
+    public static String hashAllFields(Map fields) {
 
         List fieldNames = new ArrayList(fields.keySet());
         Collections.sort(fieldNames);
@@ -111,11 +96,11 @@ public class VnpayUtils {
             }
         }
 
-        return hmacSHA512(vnpayConfig.getSecretKey(), sb.toString());
+        return hmacSHA512(VnPayConstant.SECRET_KEY, sb.toString());
 
     }
 
-    public String hmacSHA512(final String key, final String data) {
+    public static String hmacSHA512(final String key, final String data) {
 
         try {
 
@@ -142,7 +127,7 @@ public class VnpayUtils {
 
     }
 
-    public String getIpAddress(HttpServletRequest request) {
+    public static String getIpAddress(HttpServletRequest request) {
 
         String ipAdress;
         try {
@@ -161,7 +146,7 @@ public class VnpayUtils {
 
     }
 
-    public String getRandomNumber(int len) {
+    public static String getRandomNumber(int len) {
 
         Random rnd = new Random();
         String chars = "0123456789";

@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author nguyenle
  * @since 6:17 AM Tue 9/17/2024
@@ -45,7 +47,20 @@ public class PublicPromotionController {
     ) {
         Pageable pageable = request.getPageRequest(Promotion.class);
         ListPromotionResponse response = new ListPromotionResponse();
+        response.initPageResponse(pageable);
         response.setPromotions(promotionService.getAllPromotion(pageable));
+        return ResponseEntity.ok(ApiResponse.successResponse(response));
+    }
+
+    @PostMapping("/find-by-product")
+    public ResponseEntity<ApiResponse<?>> findPromotionsOfExistedProduct(
+            @RequestParam("id") Long id,
+            @RequestBody PagingAndSortingRequest request
+    ) {
+        Pageable pageable = request.getPageRequest(Promotion.class);
+        ListPromotionResponse response = new ListPromotionResponse();
+        response.initPageResponse(pageable);
+        response.setPromotions(promotionService.getProductPromotions(id));
         return ResponseEntity.ok(ApiResponse.successResponse(response));
     }
 }

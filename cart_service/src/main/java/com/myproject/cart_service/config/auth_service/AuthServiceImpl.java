@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
                             .accessToken(token)
                             .build(),
                     httpHeaders
-                    );
+            );
 
             ResponseEntity<ApiResponse<AuthResponse>> response = restTemplate.exchange(
                     authServiceBaseUrl + "/internal/validate",
@@ -78,7 +78,7 @@ public class AuthServiceImpl implements AuthService {
         return authResponse;
     }
 
-    public AuthResponse fallbackValidate(String token, Throwable throwable) {
+    private AuthResponse fallbackValidate(String token, Throwable throwable) {
         return AuthResponse.builder()
             .authenticated(false)
             .build();

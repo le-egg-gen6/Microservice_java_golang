@@ -1,20 +1,22 @@
 package com.myproject.cart_service.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.*;
 
 /**
  * @author nguyenle
  */
-@Entity
-@Table(
-    name = "t_cart",
-
-)
+@Document(collection = "c_cart")
+@CompoundIndexes({
+        @CompoundIndex(def = "{'state': -1, 'created_at': -1}", background = true)
+})
 @Data
 @Getter
 @Setter
@@ -24,11 +26,36 @@ import lombok.*;
 public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
+    @Indexed(background = true)
+    @Field("user_id")
     private String userId;
 
-    private
+    @Field("price")
+    private Double price;
+
+    @Field("products")
+    private Map<Long, Integer> products = new HashMap<>();
+
+    @Field("created_at")
+    private Date createdAt = new Date();
+
+    @Indexed(background = true)
+    @Field("state")
+    private int state = CartState.UNCONFIRMED.getValue();
+
+    @Field("location_id")
+    private String locationId;
+
+    @Field("additional_details")
+    private List<String> additionalDetails = new ArrayList<>();
+
+    @Field("fail_reasons")
+    private List<String> failReasons = new ArrayList<>();
+
+    public boolean isCartModifiable() {
+        return state == CartState.UNCONFIRMED.getValue();
+    }
 
 }

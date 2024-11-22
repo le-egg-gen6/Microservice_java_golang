@@ -25,6 +25,7 @@ public class Resilience4jConfig {
 		CircuitBreakerRegistry registry = CircuitBreakerRegistry.of(circuitBreakerConfig);
 
 		registry.circuitBreaker("authService");
+		registry.circuitBreaker("productService");
 
 		return registry;
 	}
@@ -39,6 +40,7 @@ public class Resilience4jConfig {
 		RetryRegistry registry = RetryRegistry.of(retryConfig);
 
 		registry.retry("authService");
+		registry.retry("productService");
 
 		return registry;
 	}

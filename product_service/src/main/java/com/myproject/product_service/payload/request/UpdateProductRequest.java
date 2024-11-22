@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * @author nguyenle
  * @since 7:08 PM Tue 9/24/2024
@@ -40,5 +42,13 @@ public class UpdateProductRequest {
     @JsonProperty("likesCount")
     @Min(value = 0, message = "Like count must be greater than or equal to 0!")
     private Integer likesCount;
+
+
+    @JsonProperty("categoryIds")
+    private List<Long> categoryIds;
+
+    @JsonProperty("promotionIds")
+    private List<Long> promotionIds;
+
 
 }

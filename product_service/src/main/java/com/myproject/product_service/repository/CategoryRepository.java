@@ -23,6 +23,9 @@ public interface CategoryRepository extends
         PagingAndSortingRepository<Category, Long>,
         ListPagingAndSortingRepository<Category, Long>
 {
+
+    List<Category> findByIdIn(List<Long> ids);
+
     @Query("SELECT c FROM Category c")
     List<Category> getAllCategory();
 
